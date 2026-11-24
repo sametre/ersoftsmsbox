@@ -12,13 +12,13 @@ internal sealed class IntegrationSettingsStore<TSettings> where TSettings : clas
     private readonly string filePath;
     private readonly Func<TSettings> createDefault;
 
-    internal IntegrationSettingsStore(string fileName, Func<TSettings> createDefault)
+    internal IntegrationSettingsStore(string fileName, Func<TSettings> createDefault, string? storageDirectory = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
         ArgumentNullException.ThrowIfNull(createDefault);
         this.createDefault = createDefault;
-        filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "ERSoftSMSBox", fileName);
+        filePath = Path.Combine(storageDirectory ?? Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ERSoftSMSBox"), fileName);
     }
 
     internal async Task<TSettings> LoadAsync(CancellationToken cancellationToken)

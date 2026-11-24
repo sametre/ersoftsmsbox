@@ -1,4 +1,4 @@
-using ERSoftSMSBox.Data;
+﻿using ERSoftSMSBox.Data;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using NUnit.Framework;
 
@@ -32,6 +32,12 @@ public class BBSoftRepositoryQueryTests
         Assert.That(detector.Writes, Is.Empty);
     }
 
+    [TestCaseSource(nameof(Queries))]
+    public void WhenQueryIsBuiltThenNoStringParsingIsAppliedToDates(string sql)
+    {
+        Assert.That(sql, Does.Not.Contain("SUBSTRING").IgnoreCase.And.Not.Contain("ISDATE").IgnoreCase);
+    }
+
     [TestCase("NebimV3", true)]
     [TestCase("Nebim_2024", true)]
     [TestCase("Nebim V3", false)]
@@ -49,19 +55,30 @@ public class BBSoftRepositoryQueryTests
     {
         string sql = BBSoftRepository.GetQueriesForValidation().Single(query => query.Name == name).Sql;
 
-        Assert.That(sql, Does.Contain("ISDATE(")
-            .And.Contain("CONVERT(date, VadeTarihi, 104)")
+        Assert.That(sql, Does.Contain("CONVERT(date, pd.SonOdemeTarihi)")
+            .And.Contain("CONVERT(date, pd.VadeTarihi)")
+            .And.Contain("CONVERT(date, pd.KontrolTarihi)")
             .And.Contain("CONVERT(date, '19650620', 112)"));
     }
 
     [TestCase("Customers")]
     [TestCase("CustomersWithBirthday")]
-    public void WhenCustomerReferenceIsComputedThenLaterPaymentOrDueDateIsUsed(string name)
+    public void WhenCustomerDatesAreReadThenLegacyPrecomputedTableIsUsed(string name)
     {
         string sql = BBSoftRepository.GetQueriesForValidation().Single(query => query.Name == name).Sql;
 
-        Assert.That(sql, Does.Contain("CASE WHEN LastPaymentDate IS NULL OR DueDate > LastPaymentDate")
-            .And.Contain("THEN DueDate ELSE LastPaymentDate END AS ReferenceDate"));
+        Assert.That(sql, Does.Contain("MAX(QuitPaymentDate) AS KontrolTarihi")
+            .And.Contain("FROM dbo.MusteriSonOdemeTarihi GROUP BY RetailCustomerCode")
+            .And.Not.Contain("dbo.MusteriSonOdeme "));
+    }
+
+    [TestCase("Customers")]
+    [TestCase("CustomersWithBirthday")]
+    public void WhenRecordedPaymentDateIsReadThenLegacyCustomerPaymentDateIsUsed(string name)
+    {
+        string sql = BBSoftRepository.GetQueriesForValidation().Single(query => query.Name == name).Sql;
+
+        Assert.That(sql, Does.Contain("CONVERT(date, a.PaymentDate)"));
     }
 
     [TestCase("Customers")]
@@ -88,7 +105,7 @@ public class BBSoftRepositoryQueryTests
     {
         string sql = BBSoftRepository.GetQueriesForValidation().Single(query => query.Name == name).Sql;
 
-        Assert.That(sql, Does.Contain("CONVERT(date, MaxSentDate, 104)")
+        Assert.That(sql, Does.Contain("CONVERT(date, MaxSentDate)")
             .And.Contain("FROM dbo.GonderilenMusteriler GROUP BY CurrAccCode"));
     }
 

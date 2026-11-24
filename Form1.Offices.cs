@@ -419,9 +419,6 @@ public partial class Form1
     private void ShowOffices(string pageKey)
     {
         Control page = officePages[pageKey];
-        HideIntegrations();
-        HideDatabase();
-        quickActions.Visible = false;
         officesPanel.SuspendLayout();
         try
         {
@@ -431,6 +428,8 @@ public partial class Form1
             }
             activeOfficePageKey = pageKey;
             ApplyOfficePageTexts(pageKey);
+            // VisibleChanged loads data, so hide stale child pages before showing the parent.
+            ActivateWorkspace(officesPanel);
             page.Visible = true;
             page.BringToFront();
             officesPanel.Visible = true;
@@ -656,7 +655,7 @@ public partial class Form1
         int index = customerOffice.Properties.Items.Cast<OfficeOption>().ToList().FindIndex(option => option.Code == office.OfficeCode);
         customerOffice.SelectedIndex = Math.Max(index, 0);
         tabLoaded["Customers"] = false;
-        ShowOffices("Customers");
+        ShowModule("Customers");
     }
 
     private void CustomerCategoryChanged(object? sender, EventArgs e)

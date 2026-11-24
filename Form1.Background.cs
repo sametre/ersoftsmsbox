@@ -37,6 +37,7 @@ public partial class Form1
         trayIcon.BalloonTipClicked += RestoreFromTray;
     }
 
+   
     protected override void OnShown(EventArgs e)
     {
         base.OnShown(e);

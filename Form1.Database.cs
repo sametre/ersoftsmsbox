@@ -26,9 +26,6 @@ public partial class Form1
     private readonly SimpleButton databaseCancel = new();
     private readonly LabelControl databaseResult = new();
     private readonly MemoEdit databaseScreenInfo = new();
-    private readonly TextEdit eyfelApiUrl = new();
-    private readonly TextEdit eyfelSender = new();
-    private readonly EyfelSoftProvider eyfelProvider = new();
     private readonly DatabaseSettingsStore databaseStore = new();
     private readonly BBSoftRepository repository = new();
     private TableLayoutPanel? databaseFields;
@@ -54,7 +51,7 @@ public partial class Form1
 
         TableLayoutPanel root = new()
         {
-            Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 1, RowCount = 7
+            Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 1, RowCount = 5
         };
         root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         for (int row = 0; row < root.RowCount; row++)
@@ -113,23 +110,6 @@ public partial class Form1
         databaseScreenInfo.AccessibleName = GetText("DatabaseScreenSettings");
         root.Controls.Add(databaseScreenInfo, 0, 4);
 
-        LabelControl eyfelTitle = new()
-        {
-            Text = GetText("EyfelSoftApiSection"), Anchor = AnchorStyles.Left | AnchorStyles.Right,
-            Margin = new Padding(3, 12, 3, 4)
-        };
-        eyfelTitle.Appearance.FontStyleDelta = FontStyle.Bold;
-        root.Controls.Add(eyfelTitle, 0, 5);
-
-        eyfelApiUrl.Name = "eyfelApiUrl";
-        eyfelApiUrl.Properties.MaxLength = 300;
-        eyfelApiUrl.Properties.NullText = "http://www.eyfelsoft.com/api2/sms/developer/{hesap}.send.php";
-        eyfelSender.Name = "eyfelSender";
-        eyfelSender.Properties.MaxLength = 50;
-        TableLayoutPanel eyfelFields = CreateDatabaseFields(
-            ("EyfelSoftApiUrl", eyfelApiUrl), ("EyfelSoftSender", eyfelSender));
-        root.Controls.Add(eyfelFields, 0, 6);
-
         databasePanel.Controls.Add(root);
 
         foreach (BaseEdit editor in new BaseEdit[] { databaseServer, databaseName, databaseUser, databasePassword, databaseOfficeCode, databaseWindows, databaseTrustCertificate })
@@ -183,8 +163,8 @@ public partial class Form1
 
     private void ShowDatabase()
     {
-        HideIntegrations();
-        HideOffices();
+        SelectRibbonPage("OfficesPage");
+        ActivateWorkspace(databasePanel);
         sectionTitle.Text = GetText("DatabaseSettings");
         sectionDescription.Text = GetText("DatabaseDescription");
         statusText.Caption = connectedDatabase is null ? GetText("DatabaseDisconnected") : GetText("DatabaseConnectedStatus");
@@ -220,15 +200,6 @@ public partial class Form1
         {
             databasePopulating = false;
         }
-    }
-
-    private SmsProviderDraft ReadEyfelDraft() =>
-        new(false, eyfelApiUrl.Text.Trim(), "", eyfelSender.Text.Trim());
-
-    private void PopulateEyfelSettings(SmsProviderDraft draft)
-    {
-        eyfelApiUrl.Text = draft.Identifier;
-        eyfelSender.Text = draft.Sender;
     }
 
     private void ImportDatabaseSettings(object? sender, EventArgs e)
@@ -267,17 +238,14 @@ public partial class Form1
             if (sender == databasePanel)
             {
                 DatabaseSettings settings = await databaseStore.LoadAsync(cancellation.Token);
-                SmsProviderDraft eyfelDraft = await eyfelProvider.LoadAsync(cancellation.Token);
                 if (IsDisposed) return;
                 PopulateDatabaseSettings(settings);
-                PopulateEyfelSettings(eyfelDraft);
                 databaseLoaded = true;
                 databaseResult.Text = GetText("DatabaseSafetyNote");
             }
             else if (sender == databaseSave)
             {
                 await databaseStore.SaveAsync(ReadDatabaseSettings(), cancellation.Token);
-                await eyfelProvider.SaveAsync(ReadEyfelDraft(), cancellation.Token);
                 SetDatabaseMessage(GetText("DatabaseSaved"));
             }
             else if (sender == databaseConnect)

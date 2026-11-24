@@ -16,12 +16,22 @@ public partial class Form1 : RibbonForm
     private readonly BarStaticItem statusText = new();
     private readonly SvgImageCollection menuImages;
     private readonly GroupControl quickActions = new();
+    private bool selectingRibbonPage;
+    private RibbonPage? navigatedRibbonPage;
 
     /// <summary>
     /// Creates the SMS management shell.
     /// </summary>
-    public Form1()
+    public Form1() : this(new EyfelSoftProvider(), new HttpClient(new HttpClientHandler { AllowAutoRedirect = false }))
     {
+    }
+
+    internal Form1(EyfelSoftProvider apiSettingsProvider, HttpClient apiSettingsHttpClient)
+    {
+        ArgumentNullException.ThrowIfNull(apiSettingsProvider);
+        ArgumentNullException.ThrowIfNull(apiSettingsHttpClient);
+        this.apiSettingsProvider = apiSettingsProvider;
+        this.apiSettingsHttpClient = apiSettingsHttpClient;
         InitializeComponent();
         menuImages = CreateMenuImages(components ??= new Container());
         InitializeShell();
@@ -171,6 +181,7 @@ public partial class Form1 : RibbonForm
         Panel contentHost = new() { Dock = DockStyle.Fill };
         contentHost.Controls.Add(CreateIntegrationsPanel());
         contentHost.Controls.Add(CreateDatabasePanel());
+        contentHost.Controls.Add(CreateApiSettingsPanel());
         contentHost.Controls.Add(CreateOfficesPanel());
         contentHost.Controls.Add(CreateUpdatePanel());
         contentHost.Controls.Add(CreateDashboardPanel());
@@ -282,10 +293,8 @@ public partial class Form1 : RibbonForm
 
     private void ShowHome()
     {
-        HideIntegrations();
-        HideDatabase();
-        HideOffices();
-        HideUpdate();
+        SelectRibbonPage("HomePage");
+        ActivateWorkspace(dashboardPanel);
         sectionTitle.Text = GetText("HomeTitle");
         sectionDescription.Text = GetText("HomeDescription");
         statusText.Caption = GetText("Ready");
@@ -315,6 +324,14 @@ public partial class Form1 : RibbonForm
 
     private void ShowModule(string key)
     {
+        SelectRibbonPage(key switch
+        {
+            "NewSms" or "BulkSms" or "Templates" => "SmsPage",
+            "Offices" or "Customers" or "PhoneBook" or "SentSms" or "DatabaseSettings" => "OfficesPage",
+            "SentMessages" or "DeliveryReports" => "ReportsPage",
+            "ConnectionSettings" or "ApplicationSettings" or "AppUpdate" => "SettingsPage",
+            _ => key
+        });
         switch (key)
         {
             case "Offices" or "Customers" or "PhoneBook" or "SentSms" or "Templates" or "NewSms" or "BulkSms":
@@ -322,21 +339,18 @@ public partial class Form1 : RibbonForm
                 return;
             case "SentMessages":
                 ShowOffices("SentSms");
-
-            
-
-                
-
-
-
                 return;
             case "DatabaseSettings":
                 ShowDatabase();
                 return;
             case "ConnectionSettings":
-                ShowIntegrations();
+                ShowApiSettings();
                 return;
             case "ApplicationSettings":
+                ActivateWorkspace(null);
+                sectionTitle.Text = GetText(key);
+                sectionDescription.Text = GetText(key + "Hint");
+                statusText.Caption = GetText(key);
                 using (ReminderSettingsDialog dialog = new())
                 {
                     dialog.ShowDialog(this);
@@ -346,14 +360,42 @@ public partial class Form1 : RibbonForm
                 ShowUpdate();
                 return;
         }
-        HideIntegrations();
-        HideDatabase();
-        HideOffices();
+        ActivateWorkspace(null);
         sectionTitle.Text = GetText(key);
         sectionDescription.Text = string.Format(CultureInfo.CurrentCulture,
             GetText("ModuleDescription"), sectionTitle.Text);
         statusText.Caption = sectionTitle.Text;
         quickActions.Visible = false;
+    }
+
+    private void SelectRibbonPage(string name)
+    {
+        RibbonPage? page = Ribbon?.Pages.FirstOrDefault(candidate => candidate.Name == name);
+        if (page is null) return;
+        // DevExpress can post SelectedPageChanged after the button has already opened its
+        // exact module. Ignore that delayed notification instead of reopening the tab default.
+        navigatedRibbonPage = page;
+        if (Ribbon!.SelectedPage == page) return;
+        selectingRibbonPage = true;
+        try { Ribbon.SelectedPage = page; }
+        finally { selectingRibbonPage = false; }
+    }
+
+    // Every navigation path uses the same visibility rules, including ribbon tabs and shortcuts.
+    private void ActivateWorkspace(Control? page)
+    {
+        if (page != integrationsPanel) HideIntegrations();
+        if (page != databasePanel) HideDatabase();
+        if (page != apiSettingsPanel) HideApiSettings();
+        if (page != officesPanel) HideOffices();
+        if (page != updatePanel) HideUpdate();
+        if (page != dashboardPanel) HideDashboard();
+        quickActions.Visible = false;
+        if (page is not null)
+        {
+            page.Visible = true;
+            page.BringToFront();
+        }
     }
 
     private string GetText(string key) => resources.GetString(key) ?? key;

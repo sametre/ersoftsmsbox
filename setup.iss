@@ -1,5 +1,5 @@
-#define AppName "ERSoftSMSBox"
-#define AppVersion "1.0.2"
+﻿#define AppName "ERSoftSMSBox"
+#define AppVersion "1.0.8"
 #define AppPublisher "ERSoft"
 #define AppURL "https://temasre.shop"
 #define AppExeName "ERSoftSMSBox.exe"

@@ -30,6 +30,7 @@ public partial class Form1
             ("PhoneBook", "svgimages/outlook%20inspired/customercontactdirectory.svg"),
             ("SentSms", "svgimages/outlook%20inspired/glyph_mail.svg"),
             ("NetGsm", "svgimages/icon%20builder/electronics_phoneandroid.svg"),
+            ("EyfelSoft", "svgimages/dashboards/editconnection.svg"),
             ("ApplicationSettings", "svgimages/icon%20builder/actions_settings.svg"),
             ("Exit", "devav/actions/exit.svg"),
             ("SelectTheme", "svgimages/diagramicons/palette.svg"),

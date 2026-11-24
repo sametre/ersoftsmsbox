@@ -98,9 +98,8 @@ public partial class Form1
 
     private void ShowUpdate()
     {
-        HideIntegrations();
-        HideDatabase();
-        HideOffices();
+        SelectRibbonPage("SettingsPage");
+        ActivateWorkspace(updatePanel);
         sectionTitle.Text = GetText("AppUpdate");
         sectionDescription.Text = GetText("AppUpdateHint");
         statusText.Caption = GetText("AppUpdate");
@@ -143,8 +142,7 @@ public partial class Form1
                 SetUpdateMessage(GetText("UpdateNoRelease"));
                 return;
             }
-            bool isNewer = string.Compare(info.Version, AppVersion.Current,
-                System.StringComparison.OrdinalIgnoreCase) > 0;
+            bool isNewer = IsNewerVersion(info.Version);
             if (!isNewer)
             {
                 SetUpdateMessage(string.Format(System.Globalization.CultureInfo.CurrentCulture,
@@ -216,6 +214,11 @@ public partial class Form1
                 GetText("UpdateIOError"), ex.Message));
             updateProgress.Visible = false;
         }
+        catch (System.ComponentModel.Win32Exception ex)
+        {
+            SetUpdateMessage(ex.NativeErrorCode == 1223 ? GetText("UpdateCancelled") : ex.Message);
+            updateProgress.Visible = false;
+        }
         finally
         {
             updateOperation = null;
@@ -227,27 +230,71 @@ public partial class Form1
     private static void ApplyUpdate(string zipPath, string version)
     {
         string installDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\', '/');
-        string scriptPath = Path.Combine(Path.GetTempPath(), "ERSoftApplyUpdate.ps1");
+        string operationId = Guid.NewGuid().ToString("N");
+        string scriptPath = Path.Combine(Path.GetTempPath(), $"ERSoftApplyUpdate_{operationId}.ps1");
         string exePath = Path.Combine(installDir, "ERSoftSMSBox.exe");
-        string extractDir = Path.Combine(Path.GetTempPath(), $"ERSoftExtract_{version}");
+        string extractDir = Path.Combine(Path.GetTempPath(), $"ERSoftExtract_{operationId}");
+        int pid = System.Diagnostics.Process.GetCurrentProcess().Id;
+        bool requiresElevation = !CanWriteUpdateTo(installDir);
 
-        string script = $@"
-Start-Sleep -Seconds 2
-Expand-Archive -Path '{zipPath}' -DestinationPath '{extractDir}' -Force
-Copy-Item -Path '{extractDir}\*' -Destination '{installDir}' -Recurse -Force
-Remove-Item -Path '{extractDir}' -Recurse -Force
-Remove-Item -Path '{zipPath}' -Force
-Start-Process -FilePath '{exePath}'
-";
+        string script = CreateUpdateScript(zipPath, installDir, exePath, extractDir, pid);
         File.WriteAllText(scriptPath, script, System.Text.Encoding.UTF8);
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
         {
             FileName = "powershell.exe",
             Arguments = $"-NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File \"{scriptPath}\"",
             UseShellExecute = true,
+            Verb = requiresElevation ? "runas" : "",
             WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
         });
         Application.Exit();
+    }
+
+    private static bool CanWriteUpdateTo(string directory)
+    {
+        string probe = Path.Combine(directory, $".ersoft-update-{Guid.NewGuid():N}.tmp");
+        try
+        {
+            using FileStream stream = new(probe, FileMode.CreateNew, FileAccess.Write, FileShare.None,
+                1, FileOptions.DeleteOnClose);
+            return true;
+        }
+        catch (UnauthorizedAccessException) { return false; }
+        catch (IOException) { return false; }
+    }
+
+    internal static string CreateUpdateScript(string zipPath, string installDir, string exePath, string extractDir, int pid)
+    {
+        static string Quote(string value) => value.Replace("'", "''");
+        zipPath = Quote(zipPath);
+        installDir = Quote(installDir);
+        exePath = Quote(exePath);
+        extractDir = Quote(extractDir);
+        return $@"
+Add-Type -AssemblyName System.Windows.Forms
+$ErrorActionPreference = 'Stop'
+try {{
+    $proc = Get-Process -Id {pid} -ErrorAction SilentlyContinue
+    if ($proc) {{
+        Wait-Process -Id {pid} -Timeout 30 -ErrorAction Stop
+    }}
+    Start-Sleep -Milliseconds 500
+    Expand-Archive -LiteralPath '{zipPath}' -DestinationPath '{extractDir}' -Force
+    foreach ($required in @('ERSoftSMSBox.exe', 'ERSoftSMSBox.dll', 'ERSoftSMSBox.runtimeconfig.json', 'ERSoftSMSBox.deps.json')) {{
+        if (-not (Test-Path -LiteralPath (Join-Path '{extractDir}' $required))) {{
+            throw ""Guncelleme paketi eksik: $required""
+        }}
+    }}
+    Get-ChildItem -LiteralPath '{extractDir}' | Copy-Item -Destination '{installDir}' -Recurse -Force -ErrorAction Stop
+    Remove-Item -LiteralPath '{extractDir}' -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath '{zipPath}' -Force -ErrorAction SilentlyContinue
+    Start-Process -FilePath '{exePath}'
+}} catch {{
+    $msg = ""Guncelleme uygulanamadi:`n$($_.Exception.Message)`n`nUygulama yeniden baslatiliyor.""
+    [System.Windows.Forms.MessageBox]::Show($msg, ""ERSoftSMSBox Guncelleme Hatasi"", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
+    if (Test-Path '{exePath}') {{ Start-Process -FilePath '{exePath}' }}
+}}
+";
     }
 
     private BarButtonItem CreateUpdateBadge()
@@ -274,12 +321,13 @@ Start-Process -FilePath '{exePath}'
             using System.Threading.CancellationTokenSource cts = new(TimeSpan.FromSeconds(15));
             Updates.VersionInfo? info = await updateService.CheckForUpdateAsync(cts.Token);
             if (IsDisposed || info is null) return;
-            bool isNewer = string.Compare(info.Version, AppVersion.Current,
-                System.StringComparison.OrdinalIgnoreCase) > 0;
-            if (isNewer) ShowUpdateBadge(info.Version);
+            if (IsNewerVersion(info.Version)) ShowUpdateBadge(info.Version);
         }
         catch { /* arka plan kontrolü sessizce başarısız olabilir */ }
     }
+
+    internal static bool IsNewerVersion(string remote) =>
+        Version.TryParse(remote, out Version? r) && Version.TryParse(AppVersion.Current, out Version? c) && r > c;
 
     private void ShowUpdateBadge(string version)
     {

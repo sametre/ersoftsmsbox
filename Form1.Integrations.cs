@@ -18,6 +18,10 @@ public partial class Form1
     private readonly LabelControl integrationSecretLabel = new();
     private readonly TextEdit integrationIdentifier = new();
     private readonly TextEdit integrationSecret = new();
+    private readonly TextEdit integrationUsername = new();
+    private readonly TextEdit integrationVendor = new();
+    private readonly LabelControl integrationUsernameLabel = new();
+    private readonly LabelControl integrationVendorLabel = new();
     private readonly ComboBoxEdit integrationSender = new();
     private readonly SimpleButton integrationSave = new();
     private readonly SimpleButton integrationTest = new();
@@ -31,6 +35,7 @@ public partial class Form1
     private bool integrationDirty;
     private bool integrationPopulating;
     private bool integrationBusy;
+    private bool reloadIntegrationOnReturn;
 
     private PanelControl CreateIntegrationsPanel()
     {
@@ -51,7 +56,7 @@ public partial class Form1
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             ColumnCount = 2,
-            RowCount = 8
+            RowCount = 10
         };
         fields.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
@@ -88,6 +93,12 @@ public partial class Form1
         AddIntegrationField(fields, activeProvider.TextKey("Identifier"), integrationIdentifier, 2, integrationIdentifierLabel);
         AddIntegrationField(fields, activeProvider.TextKey("Secret"), integrationSecret, 3, integrationSecretLabel);
         AddIntegrationField(fields, "IntegrationSender", integrationSender, 4);
+        integrationUsername.Name = "integrationUsername";
+        integrationVendor.Name = "integrationVendor";
+        integrationUsername.EditValueChanged += IntegrationCredentialsChanged;
+        integrationVendor.EditValueChanged += IntegrationCredentialsChanged;
+        AddIntegrationField(fields, "EyfelSoftUsername", integrationUsername, 5, integrationUsernameLabel);
+        AddIntegrationField(fields, "EyfelSoftVendor", integrationVendor, 6, integrationVendorLabel);
 
         LabelControl securityNote = new()
         {
@@ -96,7 +107,7 @@ public partial class Form1
             Anchor = AnchorStyles.Left | AnchorStyles.Right,
             Margin = new Padding(3, 12, 3, 12)
         };
-        fields.Controls.Add(securityNote, 0, 5);
+        fields.Controls.Add(securityNote, 0, 7);
         fields.SetColumnSpan(securityNote, 2);
 
         FlowLayoutPanel buttons = new()
@@ -116,7 +127,7 @@ public partial class Form1
         buttons.Controls.Add(integrationSave);
         buttons.Controls.Add(integrationTest);
         buttons.Controls.Add(integrationCancel);
-        fields.Controls.Add(buttons, 0, 6);
+        fields.Controls.Add(buttons, 0, 8);
         fields.SetColumnSpan(buttons, 2);
 
         integrationResult.Name = "integrationResult";
@@ -125,7 +136,7 @@ public partial class Form1
         integrationResult.Margin = new Padding(3, 12, 3, 16);
         integrationResult.Text = GetText("IntegrationInactive");
         integrationResult.AccessibleName = GetText("IntegrationsPage");
-        fields.Controls.Add(integrationResult, 0, 7);
+        fields.Controls.Add(integrationResult, 0, 9);
         fields.SetColumnSpan(integrationResult, 2);
         integrationsPanel.Controls.Add(fields);
         ApplyProviderTexts();
@@ -168,13 +179,18 @@ public partial class Form1
 
     private void RibbonPageChanged(object? sender, EventArgs e)
     {
-        if (sender is RibbonControl { SelectedPage.Name: "IntegrationsPage" })
+        if (selectingRibbonPage) return;
+        if (sender is not RibbonControl { SelectedPage: { } page }) return;
+        if (page == navigatedRibbonPage) return;
+        switch (page.Name)
         {
-            ShowIntegrations();
-        }
-        else if (integrationsPanel.Visible)
-        {
-            ShowHome();
+            case "HomePage": ShowHome(); break;
+            case "SmsPage": ShowModule("NewSms"); break;
+            case "OfficesPage": ShowModule("Offices"); break;
+            case "ReportsPage": ShowModule("SentMessages"); break;
+            case "SettingsPage": ShowModule("ConnectionSettings"); break;
+            case "IntegrationsPage": ShowIntegrations(); break;
+            default: ShowModule(page.Name); break;
         }
     }
 
@@ -184,18 +200,21 @@ public partial class Form1
         {
             return;
         }
+        SelectRibbonPage("IntegrationsPage");
         sectionTitle.Text = activeProvider.Name;
-        HideDatabase();
-        HideOffices();
+        ActivateWorkspace(integrationsPanel);
         sectionDescription.Text = GetText(activeProvider.TextKey("Description"));
         statusText.Caption = GetText("IntegrationsPage") + " — " + activeProvider.Name;
         quickActions.Visible = false;
         integrationsPanel.Visible = true;
+        if (integrationBusy && integrationOperation?.IsCancellationRequested == true)
+            reloadIntegrationOnReturn = true;
     }
 
     private void HideIntegrations()
     {
         integrationOperation?.Cancel();
+        reloadIntegrationOnReturn = false;
         integrationsPanel.Visible = false;
     }
 
@@ -246,6 +265,8 @@ public partial class Form1
             integrationEnabled.Checked = false;
             integrationIdentifier.Text = "";
             integrationSecret.Text = "";
+            integrationUsername.Text = "";
+            integrationVendor.Text = "";
             integrationSender.Properties.Items.Clear();
             integrationSender.Text = "";
         }
@@ -282,16 +303,19 @@ public partial class Form1
     {
         integrationIdentifierLabel.Text = integrationIdentifier.AccessibleName = GetText(activeProvider.TextKey("Identifier"));
         integrationSecretLabel.Text = integrationSecret.AccessibleName = GetText(activeProvider.TextKey("Secret"));
+        bool eyfel = activeProvider is EyfelSoftProvider;
+        integrationUsername.Visible = integrationUsernameLabel.Visible = eyfel;
+        integrationVendor.Visible = integrationVendorLabel.Visible = eyfel;
         integrationResult.AccessibleName = activeProvider.Name;
     }
 
     private SmsProviderDraft GetIntegrationDraft()
-        => new(integrationEnabled.Checked, integrationIdentifier.Text.Trim(), integrationSecret.Text.Trim(),
-            integrationSender.Text.Trim());
+        => new(integrationEnabled.Checked, integrationIdentifier.Text.Trim(), integrationSecret.Text,
+            integrationSender.Text.Trim(), integrationUsername.Text.Trim(), integrationVendor.Text.Trim());
 
     private async void IntegrationActionClickAsync(object? sender, EventArgs e)
     {
-        if (integrationBusy || IsDisposed || sender == integrationsPanel && (!integrationsPanel.Visible || integrationLoaded))
+        if (integrationBusy || IsDisposed || Disposing || sender == integrationsPanel && (!integrationsPanel.Visible || integrationLoaded))
         {
             return;
         }
@@ -307,7 +331,7 @@ public partial class Form1
             if (sender == integrationsPanel)
             {
                 SmsProviderDraft settings = await provider.LoadAsync(cancellation.Token);
-                if (IsDisposed || provider != activeProvider)
+                if (IsDisposed || Disposing || cancellation.IsCancellationRequested || provider != activeProvider)
                 {
                     return;
                 }
@@ -316,6 +340,8 @@ public partial class Form1
                 {
                     integrationIdentifier.Text = settings.Identifier;
                     integrationSecret.Text = settings.Secret;
+                    integrationUsername.Text = settings.Username;
+                    integrationVendor.Text = settings.Vendor;
                     integrationSender.Text = settings.Sender;
                     integrationEnabled.Checked = settings.IsActive;
                     integrationLoaded = true;
@@ -330,18 +356,16 @@ public partial class Form1
             else if (sender == integrationSave)
             {
                 SmsProviderDraft settings = GetIntegrationDraft();
-                if (settings.IsActive && (string.IsNullOrWhiteSpace(settings.Identifier) || string.IsNullOrWhiteSpace(settings.Secret)))
-                {
-                    throw new ArgumentException(IntegrationText.Format("IntegrationCredentialsRequired",
-                        GetText(provider.TextKey("Identifier")), GetText(provider.TextKey("Secret"))));
-                }
+                provider.ValidateDraft(settings);
                 if (settings.IsActive && settings.Sender.Length > 0 && verifiedSenders is not null
                     && !verifiedSenders.Contains(settings.Sender, StringComparer.Ordinal))
                 {
                     throw new InvalidOperationException(GetText("IntegrationSenderInvalid"));
                 }
                 await provider.SaveAsync(settings, cancellation.Token);
-                if (!IsDisposed && provider == activeProvider)
+                if (provider is EyfelSoftProvider && !IsDisposed && !Disposing)
+                    InvalidateApiSettings();
+                if (!IsDisposed && !Disposing && !cancellation.IsCancellationRequested && provider == activeProvider)
                 {
                     integrationLoaded = true;
                     integrationDirty = false;
@@ -353,11 +377,11 @@ public partial class Form1
             {
                 SmsProviderAccount account = await provider.GetAccountAsync(integrationHttpClient, GetIntegrationDraft(),
                     cancellation.Token);
-                if (IsDisposed || provider != activeProvider)
+                if (IsDisposed || Disposing || cancellation.IsCancellationRequested || provider != activeProvider)
                 {
                     return;
                 }
-                verifiedSenders = account.Senders;
+                verifiedSenders = account.CredentialsVerified ? account.Senders : null;
                 integrationPopulating = true;
                 try
                 {
@@ -368,8 +392,9 @@ public partial class Form1
                 {
                     integrationPopulating = false;
                 }
-                integrationResult.Text = IntegrationText.Format("IntegrationSuccess", account.Balance, account.Sms,
-                    account.Senders.Count);
+                integrationResult.Text = account.CredentialsVerified
+                    ? IntegrationText.Format("IntegrationSuccess", account.Balance, account.Sms, account.Senders.Count)
+                    : GetText("EyfelSoftConnectionAvailable");
                 if (account.Senders.Count == 0)
                 {
                     integrationResult.Text += Environment.NewLine + GetText(provider.TextKey("NoSenders"));
@@ -424,12 +449,13 @@ public partial class Form1
                 integrationOperation = null;
             }
             integrationBusy = false;
-            if (!IsDisposed)
+            if (!IsDisposed && !Disposing)
             {
                 UpdateIntegrationControls();
                 // The provider was switched while this operation ran; load the new provider's saved settings now.
-                if (provider != activeProvider && integrationsPanel.Visible && !integrationLoaded)
+                if ((provider != activeProvider || reloadIntegrationOnReturn) && integrationsPanel.Visible && !integrationLoaded)
                 {
+                    reloadIntegrationOnReturn = false;
                     IntegrationActionClickAsync(integrationsPanel, EventArgs.Empty);
                 }
             }
@@ -467,20 +493,24 @@ public partial class Form1
         integrationProvider.Enabled = !integrationBusy;
         integrationEnabled.Enabled = !integrationBusy;
         integrationIdentifier.Enabled = integrationSecret.Enabled = integrationSender.Enabled
+            = integrationUsername.Enabled = integrationVendor.Enabled
             = !integrationBusy && integrationEnabled.Checked;
         integrationSave.Enabled = !integrationBusy;
-        integrationTest.Enabled = !integrationBusy && integrationEnabled.Checked
-            && !string.IsNullOrWhiteSpace(integrationIdentifier.Text) && !string.IsNullOrWhiteSpace(integrationSecret.Text);
+        integrationTest.Enabled = !integrationBusy && activeProvider.CanCheckAccount(GetIntegrationDraft());
         integrationCancel.Enabled = integrationBusy;
     }
 
-    private void CancelIntegrationOperation(object? sender, EventArgs e) => integrationOperation?.Cancel();
+    private void CancelIntegrationOperation(object? sender, EventArgs e)
+    {
+        reloadIntegrationOnReturn = false;
+        integrationOperation?.Cancel();
+    }
 
     private void ShowIntegrationError(string key) => ShowIntegrationMessage(GetText(key));
 
     private void ShowIntegrationMessage(string message)
     {
-        if (!IsDisposed)
+        if (!IsDisposed && !Disposing)
         {
             integrationResult.Text = message;
         }

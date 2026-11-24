@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text.Json;
+using DevExpress.Utils.Html;
 using ERSoftSMSBox.Integrations;
 
 namespace ERSoftSMSBox.Data;
@@ -15,6 +16,7 @@ internal sealed class DatabaseSettingsStore
         if (!File.Exists(filePath))
         {
             return new DatabaseSettings();
+        
         }
 
         byte[] encrypted = await File.ReadAllBytesAsync(filePath, cancellationToken).ConfigureAwait(false);
@@ -44,6 +46,10 @@ internal sealed class DatabaseSettingsStore
         {
             CryptographicOperations.ZeroMemory(plain);
         }
+
+
+        
+
 
         string directory = Path.GetDirectoryName(filePath) ?? throw new InvalidOperationException();
         Directory.CreateDirectory(directory);

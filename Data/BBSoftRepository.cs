@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Microsoft.Data.SqlClient;
@@ -139,17 +139,8 @@ internal sealed class BBSoftRepository
 
     internal static bool IsSafeIdentifier(string name) => Identifier.IsMatch(name);
 
-    // SQL Server 2008 uyumlu güvenli tarih dönüşümü (TRY_CONVERT SQL 2012+ gerektirir).
-    // varchar DD.MM.YYYY ve datetime kolonların ikisini de destekler:
-    // datetime ise CONVERT(nvarchar) sonucu 10 karakter olmaz, ISDATE(col)=1 fallback'i devreye girer.
-    private static string SafeDate(string col)
-    {
-        string s = $"CONVERT(nvarchar(50), {col})";
-        return $"CASE WHEN {col} IS NULL THEN NULL " +
-               $"WHEN LEN({s}) = 10 AND ISDATE(SUBSTRING({s}, 7, 4) + SUBSTRING({s}, 4, 2) + LEFT({s}, 2)) = 1 THEN CONVERT(date, {s}, 104) " +
-               $"WHEN ISDATE({col}) = 1 THEN CONVERT(date, {col}) " +
-               $"ELSE NULL END";
-    }
+    // Every BBSoft date column is datetime/date (verified against the live schema), so no text parsing is needed.
+    internal static string AsDate(string col) => $"CONVERT(date, {col})";
 
     internal async Task<DateTime> ReadServerTimeAsync(DatabaseSettings settings, CancellationToken cancellationToken)
     {
@@ -171,14 +162,17 @@ internal sealed class BBSoftRepository
         }
         List<string> messages = [];
         List<int> days = [];
-        for (int stage = 1; stage <= 5; stage++)
+        // Live BBSoft uses MesajVadeGunu1..8 / MesajNot1..8 / KefilGonder1..8; older builds used Mesaj1VadeGunu / Mesaj1 / KefilGonder.
+        bool guarantor = ReadOptionalBool(reader, "KefilGonder");
+        for (int stage = 1; stage <= 8; stage++)
         {
-            messages.Add(ReadOptionalText(reader, "Mesaj" + stage));
-            days.Add(ReadOptionalInt(reader, $"Mesaj{stage}VadeGunu"));
+            string dayColumn = HasColumn(reader, $"MesajVadeGunu{stage}") ? $"MesajVadeGunu{stage}" : $"Mesaj{stage}VadeGunu";
+            if (!HasColumn(reader, dayColumn)) break;
+            days.Add(ReadOptionalInt(reader, dayColumn));
+            messages.Add(HasColumn(reader, $"MesajNot{stage}") ? ReadOptionalText(reader, $"MesajNot{stage}") : ReadOptionalText(reader, "Mesaj" + stage));
+            guarantor |= ReadOptionalBool(reader, $"KefilGonder{stage}");
         }
         string nebim = ReadOptionalText(reader, "VeriAlinacakDatabases");
-        bool guarantor = HasColumn(reader, "KefilGonder") && !reader.IsDBNull(reader.GetOrdinal("KefilGonder"))
-            && Convert.ToBoolean(reader.GetValue(reader.GetOrdinal("KefilGonder")), CultureInfo.InvariantCulture);
 
         return new BBSoftScreenSettings(messages.AsReadOnly(), days.AsReadOnly(), IsSafeIdentifier(nebim) ? nebim : "", guarantor);
     }
@@ -560,6 +554,9 @@ internal sealed class BBSoftRepository
     private static string ReadOptionalText(SqlDataReader reader, string name)
         => HasColumn(reader, name) ? ReadText(reader, reader.GetOrdinal(name)) : "";
 
+    private static bool ReadOptionalBool(SqlDataReader reader, string name)
+        => HasColumn(reader, name) && ReadBool(reader, reader.GetOrdinal(name));
+
     private static int ReadOptionalInt(SqlDataReader reader, string name)
     {
         if (!HasColumn(reader, name) || reader.IsDBNull(reader.GetOrdinal(name)))
@@ -704,17 +701,14 @@ internal sealed class BBSoftRepository
                 FROM dbo.MusteriTelefonNo WHERE TelefonNo IS NOT NULL GROUP BY CurrAccCode
             ),
             PayDates AS (
-                SELECT COALESCE(so.RetailCustomerCode, sot.RetailCustomerCode) AS CurrAccCode,
-                       sot.VadeTarihi, so.ExpiryDate,
-                       COALESCE(so.QuitPaymentDate, sot.QuitPaymentDate) AS LastPaymentDate
-                FROM (SELECT RetailCustomerCode, MAX(ExpiryDate) AS ExpiryDate, MAX(QuitPaymentDate) AS QuitPaymentDate
-                      FROM dbo.MusteriSonOdeme GROUP BY RetailCustomerCode) AS so
-                FULL OUTER JOIN (SELECT RetailCustomerCode, MAX(QuitPaymentDate) AS QuitPaymentDate, MAX(VadeTarihi) AS VadeTarihi
-                                 FROM dbo.MusteriSonOdemeTarihi GROUP BY RetailCustomerCode) AS sot
-                             ON sot.RetailCustomerCode = so.RetailCustomerCode
+                SELECT RetailCustomerCode AS CurrAccCode,
+                       MAX(SonOdemeTarihi) AS SonOdemeTarihi,
+                       MAX(VadeTarihi) AS VadeTarihi,
+                       MAX(QuitPaymentDate) AS KontrolTarihi
+                FROM dbo.MusteriSonOdemeTarihi GROUP BY RetailCustomerCode
             ),
             ReminderDates AS (
-                SELECT CurrAccCode, {SafeDate("MaxSentDate")} AS LastReminderDate
+                SELECT CurrAccCode, {AsDate("MaxSentDate")} AS LastReminderDate
                 FROM dbo.GonderilenMusteriler GROUP BY CurrAccCode, MaxSentDate
             ),
             BaseData AS (
@@ -725,11 +719,13 @@ internal sealed class BBSoftRepository
                        COALESCE(p.Phone, N'') AS Phone,
                        COALESCE(p.PhoneCount, 0) AS PhoneCount,
                        COALESCE(b.Debit, 0) AS Debt,
-                       pd.VadeTarihi, pd.ExpiryDate, pd.LastPaymentDate,
+                       NULLIF({AsDate("pd.SonOdemeTarihi")}, CONVERT(date, '19650620', 112)) AS LastPaymentDate,
+                       NULLIF({AsDate("pd.VadeTarihi")}, CONVERT(date, '19650620', 112)) AS DueDate,
+                       NULLIF({AsDate("pd.KontrolTarihi")}, CONVERT(date, '19650620', 112)) AS ReferenceDate,
                        a.SSMMesaj AS Stage,
                        g.LastReminderDate,
                        COALESCE(gs.SentCount, 0) AS SentCount,
-                       gs.RecordedPaymentDate,
+                       {AsDate("a.PaymentDate")} AS RecordedPaymentDate,
                        CASE WHEN l.CurrAccCode IS NULL THEN 0 ELSE 1 END AS LegalFollowUp
                        {birthdaySelectColumns}
                 FROM dbo.MusteriAdSoyad AS a
@@ -739,27 +735,16 @@ internal sealed class BBSoftRepository
                 LEFT JOIN PayDates AS pd ON pd.CurrAccCode = a.CurrAccCode
                 LEFT JOIN (SELECT CurrAccCode, MAX(LastReminderDate) AS LastReminderDate
                            FROM ReminderDates GROUP BY CurrAccCode) AS g ON g.CurrAccCode = a.CurrAccCode
-                LEFT JOIN (SELECT CurrAccCode, COUNT(*) AS SentCount, MAX(QuitPaymentDate) AS RecordedPaymentDate
+                LEFT JOIN (SELECT CurrAccCode, COUNT(*) AS SentCount
                            FROM dbo.GonderilenSSMler GROUP BY CurrAccCode) AS gs ON gs.CurrAccCode = a.CurrAccCode
                 LEFT JOIN (SELECT DISTINCT CurrAccCode FROM dbo.AvukatlikKarti) AS l ON l.CurrAccCode = a.CurrAccCode
                 {birthdayJoin}
-            ),
-            WithDueDate AS (
-                SELECT *,
-                       NULLIF(COALESCE({SafeDate("VadeTarihi")}, ExpiryDate), CONVERT(date, '19650620', 112)) AS DueDate
-                FROM BaseData
-            ),
-            WithReference AS (
-                SELECT *,
-                       CASE WHEN LastPaymentDate IS NULL OR DueDate > LastPaymentDate
-                            THEN DueDate ELSE LastPaymentDate END AS ReferenceDate
-                FROM WithDueDate
             ),
             FinalData AS (
                 SELECT *,
                        CASE WHEN ReferenceDate IS NULL THEN NULL
                             ELSE DATEDIFF(day, ReferenceDate, CAST(GETDATE() AS date)) END AS DaysOverdue
-                FROM WithReference
+                FROM BaseData
             )
             SELECT TOP (@Take) CustomerCode, FullName, OfficeCode, OfficeDescription, Phone, PhoneCount, Debt,
                    ReferenceDate, DaysOverdue, Stage, LastReminderDate, SentCount, LegalFollowUp,
@@ -836,10 +821,10 @@ internal sealed class BBSoftRepository
         OPTION (RECOMPILE);
         """;
 
-    private const string SentCustomersQuery = """
+    private static readonly string SentCustomersQuery = $"""
         SELECT m.CurrAccCode,
-               CASE WHEN CONVERT(nvarchar(50), m.MinSentDate) IS NULL THEN NULL WHEN LEN(CONVERT(nvarchar(50), m.MinSentDate)) = 10 AND ISDATE(SUBSTRING(CONVERT(nvarchar(50), m.MinSentDate), 7, 4) + SUBSTRING(CONVERT(nvarchar(50), m.MinSentDate), 4, 2) + LEFT(CONVERT(nvarchar(50), m.MinSentDate), 2)) = 1 THEN CONVERT(date, CONVERT(nvarchar(50), m.MinSentDate), 104) WHEN ISDATE(m.MinSentDate) = 1 THEN CONVERT(date, m.MinSentDate) ELSE NULL END AS MinSentDate,
-               CASE WHEN CONVERT(nvarchar(50), m.MaxSentDate) IS NULL THEN NULL WHEN LEN(CONVERT(nvarchar(50), m.MaxSentDate)) = 10 AND ISDATE(SUBSTRING(CONVERT(nvarchar(50), m.MaxSentDate), 7, 4) + SUBSTRING(CONVERT(nvarchar(50), m.MaxSentDate), 4, 2) + LEFT(CONVERT(nvarchar(50), m.MaxSentDate), 2)) = 1 THEN CONVERT(date, CONVERT(nvarchar(50), m.MaxSentDate), 104) WHEN ISDATE(m.MaxSentDate) = 1 THEN CONVERT(date, m.MaxSentDate) ELSE NULL END AS MaxSentDate
+               {AsDate("m.MinSentDate")} AS MinSentDate,
+               {AsDate("m.MaxSentDate")} AS MaxSentDate
         FROM dbo.GonderilenMusteriler AS m
         INNER JOIN dbo.MusteriAdSoyad AS a ON a.CurrAccCode = m.CurrAccCode
         WHERE (@Office = N'' OR a.OfficeCode = @Office)

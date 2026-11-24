@@ -55,7 +55,7 @@ jobs:
           dotnet publish ERSoftSMSBox.csproj `
             -c Release `
             -r win-x64 `
-            --self-contained false `
+            --self-contained true `
             -o publish_output `
             --nologo
 
@@ -124,7 +124,8 @@ jobs:
       - name: ZIP oluştur (güncelleme paketi)
         shell: pwsh
         run: |
-          Compress-Archive -Path "publish_output\*" -DestinationPath "ERSoftSMSBox.zip" -CompressionLevel Optimal
+          $appFiles = "ERSoftSMSBox.exe","ERSoftSMSBox.dll","ERSoftSMSBox.runtimeconfig.json","ERSoftSMSBox.deps.json" | ForEach-Object { "publish_output\$_" }
+          Compress-Archive -Path $appFiles -DestinationPath "ERSoftSMSBox.zip" -CompressionLevel Optimal
           $mb = [math]::Round((Get-Item ERSoftSMSBox.zip).Length / 1MB, 1)
           echo "ZIP boyutu: $mb MB"
 

@@ -153,7 +153,7 @@ Görünüm sekmesinden uygulamanın temasını değiştirebilirsiniz.</value></d
   <data name="DeliveryReports" xml:space="preserve"><value>Teslimat Raporları</value></data>
   <data name="SettingsPage" xml:space="preserve"><value>Ayarlar</value></data>
   <data name="SettingsGroup" xml:space="preserve"><value>Yapılandırma</value></data>
-  <data name="ConnectionSettings" xml:space="preserve"><value>Bağlantı Ayarları</value></data>
+  <data name="ConnectionSettings" xml:space="preserve"><value>SMS API Ayarları</value></data>
   <data name="ApplicationSettings" xml:space="preserve"><value>Uygulama Ayarları</value></data>
   <data name="Exit" xml:space="preserve"><value>Arka Plana Al</value></data>
   <data name="AppearancePage" xml:space="preserve"><value>Görünüm</value></data>
@@ -176,7 +176,7 @@ Bu bölümün işlevleri sonraki aşamada eklenecek.</value></data>
   <data name="ImportContactsHint" xml:space="preserve"><value>Rehber içe aktarma çalışma alanını açar.</value></data>
   <data name="SentMessagesHint" xml:space="preserve"><value>Gönderilen mesajların çalışma alanını açar.</value></data>
   <data name="DeliveryReportsHint" xml:space="preserve"><value>Mesaj teslimat raporlarının çalışma alanını açar.</value></data>
-  <data name="ConnectionSettingsHint" xml:space="preserve"><value>SMS sağlayıcısı bağlantı ayarlarının çalışma alanını açar.</value></data>
+  <data name="ConnectionSettingsHint" xml:space="preserve"><value>Eyfelsoft / AjansWebSMS servis adresini ve hesap bilgilerini kaydedin, kaydedilen ayarlarla bağlantıyı kontrol edin.</value></data>
   <data name="ApplicationSettingsHint" xml:space="preserve"><value>Uygulama tercihlerinin çalışma alanını açar.</value></data>
   <data name="ExitHint" xml:space="preserve"><value>Pencereyi sistem tepsisine gizler; uygulama açık kalır.</value></data>
   <data name="SelectThemeHint" xml:space="preserve"><value>DevExpress tema galerisinden uygulamanın görünümünü değiştirir.</value></data>
@@ -203,8 +203,17 @@ Bu bölümün işlevleri sonraki aşamada eklenecek.</value></data>
   <data name="NetGsmApiError" xml:space="preserve"><value>NetGSM isteği reddetti. HTTP {0}, hata kodu: {1}</value></data>
   <data name="EyfelSoft" xml:space="preserve"><value>Eyfelsoft</value></data>
   <data name="EyfelSoftHint" xml:space="preserve"><value>Eyfelsoft SMS API bağlantısını yapılandırın.</value></data>
-  <data name="EyfelSoftDescription" xml:space="preserve"><value>Eyfelsoft hesabınızdan aldığınız PHP endpoint URL'sini girin. Bağlantı kontrolü yalnız erişilebilirliği denetler; SMS göndermez.</value></data>
+  <data name="EyfelSoftDescription" xml:space="preserve"><value>Eyfelsoft PHP veya AjansWebSMS ASMX servis adresini girin. ASMX için kullanıcı adı, parola, vendor ve başlık gerekir. Ayarlar bu Windows kullanıcısına özel şifreli saklanır.</value></data>
   <data name="EyfelSoftIdentifier" xml:space="preserve"><value>API URL</value></data>
+  <data name="EyfelSoftSecret" xml:space="preserve"><value>SMS parolası (ASMX)</value></data>
+  <data name="EyfelSoftUsername" xml:space="preserve"><value>SMS kullanıcı adı (ASMX)</value></data>
+  <data name="EyfelSoftVendor" xml:space="preserve"><value>Vendor kodu (ASMX)</value></data>
+  <data name="EyfelSoftCredentialsRequired" xml:space="preserve"><value>ASMX servisi için kullanıcı adı, parola, vendor ve gönderen başlığını doldurun.</value></data>
+  <data name="EyfelSoftInvalidResponse" xml:space="preserve"><value>SMS servisi beklenen biçimde yanıt vermedi. Servis adresini kontrol edin.</value></data>
+  <data name="EyfelSoftInvalidPhone" xml:space="preserve"><value>Geçerli bir Türkiye cep telefonu numarası girin.</value></data>
+  <data name="EyfelSoftHttpError" xml:space="preserve"><value>SMS servisi HTTP {0} hatası verdi. Gönderim otomatik tekrarlanmadı.</value></data>
+  <data name="EyfelSoftHostError" xml:space="preserve"><value>SMS servisine ulaşılamıyor: {0}. Servis adresini ve internet bağlantısını kontrol edin.</value></data>
+  <data name="EyfelSoftConnectionAvailable" xml:space="preserve"><value>Servis erişilebilir. Bu kontrol SMS göndermez; hesap bakiyesini, parolayı veya teslimatı doğrulamaz.</value></data>
   <data name="EyfelSoftSender" xml:space="preserve"><value>Gönderen başlık</value></data>
   <data name="EyfelSoftApiError" xml:space="preserve"><value>Eyfelsoft API hatası: {0}</value></data>
   <data name="EyfelSoftUrlRequired" xml:space="preserve"><value>API URL'si boş olamaz. Eyfelsoft hesabınızdan aldığınız endpoint adresini girin.</value></data>
@@ -469,4 +478,12 @@ Bu bölümün işlevleri sonraki aşamada eklenecek.</value></data>
   <data name="DashboardStatus" xml:space="preserve"><value>Son güncelleme: {0}</value></data>
   <data name="DashboardColOffice" xml:space="preserve"><value>Ofis</value></data>
   <data name="DatabaseDebtors" xml:space="preserve"><value>Borçlu</value></data>
+  <data name="ApiSettingsUrlPrompt" xml:space="preserve"><value>Size özel SMS servis adresini girin</value></data>
+  <data name="ApiSettingsState" xml:space="preserve"><value>SMS bağlantısı</value></data>
+  <data name="ApiSettingsHelp" xml:space="preserve"><value>PHP servisinde size özel adres yeterlidir. ASMX servisinde kullanıcı adı, parola, vendor ve başlığı da girin. Bilgiler bu Windows kullanıcısına özel şifreli saklanır. Bağlantı kontrolü SMS göndermez.</value></data>
+  <data name="ApiSettingsSave" xml:space="preserve"><value>Ayarları Kaydet</value></data>
+  <data name="ApiSettingsSaveConnect" xml:space="preserve"><value>Kaydet ve Bağlantıyı Kontrol Et</value></data>
+  <data name="ApiSettingsIdle" xml:space="preserve"><value>Servis bilgilerini girip kaydedin. SMS bağlantısı için SQL bağlantısı gerekmez.</value></data>
+  <data name="ApiSettingsLoading" xml:space="preserve"><value>Kayıtlı SMS API ayarları yükleniyor…</value></data>
+  <data name="ApiSettingsSaved" xml:space="preserve"><value>SMS API ayarları kaydedildi.</value></data>
 </root>

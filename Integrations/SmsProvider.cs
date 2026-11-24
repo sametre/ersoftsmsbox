@@ -3,12 +3,14 @@ namespace ERSoftSMSBox.Integrations;
 /// <summary>
 /// Read-only account summary shared by every SMS provider: TL balance, remaining SMS count and approved sender IDs.
 /// </summary>
-public sealed record SmsProviderAccount(decimal Balance, long Sms, IReadOnlyList<string> Senders);
+public sealed record SmsProviderAccount(decimal Balance, long Sms, IReadOnlyList<string> Senders,
+    bool CredentialsVerified = true);
 
 /// <summary>
 /// Provider-neutral values edited on the integration screen. Each provider maps these onto its own settings record.
 /// </summary>
-public sealed record SmsProviderDraft(bool IsActive = false, string Identifier = "", string Secret = "", string Sender = "")
+public sealed record SmsProviderDraft(bool IsActive = false, string Identifier = "", string Secret = "", string Sender = "",
+    string Username = "", string Vendor = "")
 {
     /// <summary>
     /// Returns diagnostic information without exposing account credentials.
@@ -63,6 +65,20 @@ public abstract class SmsProvider
     /// Persists the configuration encrypted for the current Windows user.
     /// </summary>
     public abstract Task SaveAsync(SmsProviderDraft draft, CancellationToken cancellationToken);
+
+    public virtual void ValidateDraft(SmsProviderDraft draft)
+    {
+        if (draft.IsActive && (string.IsNullOrWhiteSpace(draft.Identifier) || string.IsNullOrWhiteSpace(draft.Secret)))
+            throw new ArgumentException(IntegrationText.Format("IntegrationCredentialsRequired",
+                IntegrationText.Get(TextKey("Identifier")), IntegrationText.Get(TextKey("Secret"))));
+    }
+
+    public bool CanCheckAccount(SmsProviderDraft draft)
+    {
+        if (!draft.IsActive) return false;
+        try { ValidateDraft(draft); return true; }
+        catch (ArgumentException) { return false; }
+    }
 
     /// <summary>
     /// Verifies the credentials by reading balance and sender IDs; never sends SMS.

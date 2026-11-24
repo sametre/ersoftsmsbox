@@ -7,3 +7,5 @@ internal static class AppVersion
     public const string AppKey = "BUILD_TIME_APP_KEY";
 }
 
+
+

@@ -13,6 +13,8 @@ C:\ERSoftSMSBox/
 *.pfx
 *.p12
 *.key
+*.b64
+ersoft-codesign.*
 
 # Local secrets / env
 .env
@@ -27,6 +29,9 @@ desktop.ini
 # Publish output folders
 publish/
 C:\ERSoftSMSBox/
+publish_output/
+installer_output/
+ERSoftSMSBox.zip
 
 # NuGet
 *.nupkg

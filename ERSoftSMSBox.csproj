@@ -7,6 +7,15 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <DevExpressAssemblyPath Condition="'$(DevExpressAssemblyPath)' == ''">$(ProgramW6432)\DevExpress 25.1\Components\Bin\NetCore</DevExpressAssemblyPath>
+    <!-- Uygulama kimlik bilgileri -->
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+    <Company>ERSoft</Company>
+    <Product>ERSoftSMSBox</Product>
+    <Copyright>Copyright © 2024 ERSoft</Copyright>
+    <Description>ERSoft SMS Yönetim Paneli</Description>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <NeutralResourcesLanguage>tr-TR</NeutralResourcesLanguage>
   </PropertyGroup>
 
   <ItemGroup>

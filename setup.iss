@@ -1,5 +1,5 @@
 #define AppName "ERSoftSMSBox"
-#define AppVersion "1.0.0"
+#define AppVersion "1.0.1"
 #define AppPublisher "ERSoft"
 #define AppURL "https://temasre.shop"
 #define AppExeName "ERSoftSMSBox.exe"
@@ -20,7 +20,7 @@ AllowNoIcons=yes
 LicenseFile=
 OutputDir=installer_output
 OutputBaseFilename=ERSoftSMSBox-Setup-v{#AppVersion}
-SetupIconFile=
+SetupIconFile=Resources\app.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern

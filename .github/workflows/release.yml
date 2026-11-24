@@ -82,6 +82,45 @@ jobs:
             }
           }
 
+      - name: EXE imzala (kod imzalama)
+        shell: pwsh
+        env:
+          CODE_SIGNING_CERT: ${{ secrets.CODE_SIGNING_CERT }}
+          CODE_SIGNING_PASS: ${{ secrets.CODE_SIGNING_PASS }}
+        run: |
+          if (-not $env:CODE_SIGNING_CERT) {
+            Write-Warning "CODE_SIGNING_CERT secret yok, imzalama atlanıyor"
+          } else {
+            $signtool = "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe"
+            if (-not (Test-Path $signtool)) {
+              $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin" -Recurse -Filter "signtool.exe" -ErrorAction SilentlyContinue |
+                          Where-Object { $_.FullName -match 'x64' } | Sort-Object LastWriteTime -Descending |
+                          Select-Object -First 1 -ExpandProperty FullName
+            }
+            if (-not $signtool) { Write-Warning "signtool.exe bulunamadı"; exit 0 }
+
+            # PFX'i geçici dosyaya yaz
+            $pfxBytes = [Convert]::FromBase64String($env:CODE_SIGNING_CERT)
+            $pfxPath = Join-Path $env:TEMP "ersoft-sign.pfx"
+            [IO.File]::WriteAllBytes($pfxPath, $pfxBytes)
+
+            # Ana EXE'yi imzala
+            $exePath = "publish_output\ERSoftSMSBox.exe"
+            if (Test-Path $exePath) {
+              & $signtool sign /fd SHA256 /f $pfxPath /p $env:CODE_SIGNING_PASS /d "ERSoftSMSBox" /du "https://temasre.shop" /t "http://timestamp.digicert.com" $exePath
+              Write-Host "✓ EXE imzalandı"
+            }
+
+            # Installer'ı imzala
+            $setupExe = Get-ChildItem "installer_output\*.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($setupExe) {
+              & $signtool sign /fd SHA256 /f $pfxPath /p $env:CODE_SIGNING_PASS /d "ERSoftSMSBox Setup" /du "https://temasre.shop" /t "http://timestamp.digicert.com" $setupExe.FullName
+              Write-Host "✓ Setup EXE imzalandı"
+            }
+
+            Remove-Item $pfxPath -Force -ErrorAction SilentlyContinue
+          }
+
       - name: ZIP oluştur (güncelleme paketi)
         shell: pwsh
         run: |

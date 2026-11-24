@@ -139,9 +139,17 @@ internal sealed class BBSoftRepository
 
     internal static bool IsSafeIdentifier(string name) => Identifier.IsMatch(name);
 
-    // SQL Server 2008 uyumlu güvenli tarih dönüşümü (TRY_CONVERT SQL 2012+ gerektirir)
-    private static string SafeDate(string col) =>
-        $"CASE WHEN LEN({col}) = 10 AND ISDATE(SUBSTRING({col}, 7, 4) + SUBSTRING({col}, 4, 2) + LEFT({col}, 2)) = 1 THEN CONVERT(date, {col}, 104) ELSE NULL END";
+    // SQL Server 2008 uyumlu güvenli tarih dönüşümü (TRY_CONVERT SQL 2012+ gerektirir).
+    // varchar DD.MM.YYYY ve datetime kolonların ikisini de destekler:
+    // datetime ise CONVERT(nvarchar) sonucu 10 karakter olmaz, ISDATE(col)=1 fallback'i devreye girer.
+    private static string SafeDate(string col)
+    {
+        string s = $"CONVERT(nvarchar(50), {col})";
+        return $"CASE WHEN {col} IS NULL THEN NULL " +
+               $"WHEN LEN({s}) = 10 AND ISDATE(SUBSTRING({s}, 7, 4) + SUBSTRING({s}, 4, 2) + LEFT({s}, 2)) = 1 THEN CONVERT(date, {s}, 104) " +
+               $"WHEN ISDATE({col}) = 1 THEN CONVERT(date, {col}) " +
+               $"ELSE NULL END";
+    }
 
     internal async Task<DateTime> ReadServerTimeAsync(DatabaseSettings settings, CancellationToken cancellationToken)
     {
@@ -830,8 +838,8 @@ internal sealed class BBSoftRepository
 
     private const string SentCustomersQuery = """
         SELECT m.CurrAccCode,
-               CASE WHEN LEN(m.MinSentDate) = 10 AND ISDATE(SUBSTRING(m.MinSentDate, 7, 4) + SUBSTRING(m.MinSentDate, 4, 2) + LEFT(m.MinSentDate, 2)) = 1 THEN CONVERT(date, m.MinSentDate, 104) ELSE NULL END AS MinSentDate,
-               CASE WHEN LEN(m.MaxSentDate) = 10 AND ISDATE(SUBSTRING(m.MaxSentDate, 7, 4) + SUBSTRING(m.MaxSentDate, 4, 2) + LEFT(m.MaxSentDate, 2)) = 1 THEN CONVERT(date, m.MaxSentDate, 104) ELSE NULL END AS MaxSentDate
+               CASE WHEN CONVERT(nvarchar(50), m.MinSentDate) IS NULL THEN NULL WHEN LEN(CONVERT(nvarchar(50), m.MinSentDate)) = 10 AND ISDATE(SUBSTRING(CONVERT(nvarchar(50), m.MinSentDate), 7, 4) + SUBSTRING(CONVERT(nvarchar(50), m.MinSentDate), 4, 2) + LEFT(CONVERT(nvarchar(50), m.MinSentDate), 2)) = 1 THEN CONVERT(date, CONVERT(nvarchar(50), m.MinSentDate), 104) WHEN ISDATE(m.MinSentDate) = 1 THEN CONVERT(date, m.MinSentDate) ELSE NULL END AS MinSentDate,
+               CASE WHEN CONVERT(nvarchar(50), m.MaxSentDate) IS NULL THEN NULL WHEN LEN(CONVERT(nvarchar(50), m.MaxSentDate)) = 10 AND ISDATE(SUBSTRING(CONVERT(nvarchar(50), m.MaxSentDate), 7, 4) + SUBSTRING(CONVERT(nvarchar(50), m.MaxSentDate), 4, 2) + LEFT(CONVERT(nvarchar(50), m.MaxSentDate), 2)) = 1 THEN CONVERT(date, CONVERT(nvarchar(50), m.MaxSentDate), 104) WHEN ISDATE(m.MaxSentDate) = 1 THEN CONVERT(date, m.MaxSentDate) ELSE NULL END AS MaxSentDate
         FROM dbo.GonderilenMusteriler AS m
         INNER JOIN dbo.MusteriAdSoyad AS a ON a.CurrAccCode = m.CurrAccCode
         WHERE (@Office = N'' OR a.OfficeCode = @Office)

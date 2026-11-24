@@ -1,4 +1,4 @@
-namespace ERSoftSMSBox;
+﻿namespace ERSoftSMSBox;
 
 internal static class AppVersion
 {
@@ -6,3 +6,4 @@ internal static class AppVersion
     public const string UpdateServerBase = "http://temasre.shop";
     public const string AppKey = "BUILD_TIME_APP_KEY";
 }
+

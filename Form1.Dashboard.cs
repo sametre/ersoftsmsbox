@@ -311,8 +311,9 @@ public partial class Form1
             .Select(o => new TopOfficeRow(o.OfficeDescription, o.SentCount, o.CustomerCount, o.DebtorCount))
             .ToList();
 
-        topOfficesGrid.DataSource = top;
-        topOfficesView.PopulateColumns();
+        // DataSource null yapıp sütunları temizle, sonra sütunları ekle, sonra DataSource ata.
+        // Aksi hâlde DevExpress binding zinciri kopup sütunlar boş görünebilir.
+        topOfficesGrid.DataSource = null;
         topOfficesView.Columns.Clear();
 
         AddTopOfficesColumn("OfficeName", GetText("DashboardColOffice"), 160);
@@ -320,6 +321,7 @@ public partial class Form1
         AddTopOfficesColumn("CustomerCount", GetText("DashboardKpiCustomers"), 70);
         AddTopOfficesColumn("DebtorCount", GetText("DatabaseDebtors"), 70);
 
+        topOfficesGrid.DataSource = top;
         topOfficesView.BestFitColumns();
         topOfficesView.OptionsView.ColumnAutoWidth = true;
     }

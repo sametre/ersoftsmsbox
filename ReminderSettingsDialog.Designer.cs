@@ -1,0 +1,167 @@
+namespace ERSoftSMSBox;
+
+partial class ReminderSettingsDialog
+{
+    private void InitializeComponent()
+    {
+        root = new TableLayoutPanel();
+        description = new Label();
+        fields = new TableLayoutPanel();
+        repeatLabel = new Label();
+        startLabel = new Label();
+        endLabel = new Label();
+        repeatDays = new NumericUpDown();
+        startTime = new DateTimePicker();
+        endTime = new DateTimePicker();
+        notice = new Label();
+        status = new Label();
+        buttons = new FlowLayoutPanel();
+        save = new Button();
+        cancel = new Button();
+        ((System.ComponentModel.ISupportInitialize)repeatDays).BeginInit();
+        root.SuspendLayout();
+        fields.SuspendLayout();
+        buttons.SuspendLayout();
+        SuspendLayout();
+        root.ColumnCount = 1;
+        root.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        root.RowCount = 6;
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        root.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        root.Dock = DockStyle.Fill;
+        root.Padding = new Padding(16);
+        root.TabIndex = 0;
+        description.AutoSize = true;
+        description.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        description.Margin = new Padding(3, 3, 3, 16);
+        fields.AutoSize = true;
+        fields.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        fields.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        fields.ColumnCount = 2;
+        fields.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        fields.RowCount = 3;
+        fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        fields.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        fields.TabIndex = 1;
+        fields.Enabled = false;
+        repeatLabel.AutoSize = true;
+        repeatLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        repeatLabel.TabIndex = 0;
+        startLabel.AutoSize = true;
+        startLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        startLabel.TabIndex = 2;
+        endLabel.AutoSize = true;
+        endLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        endLabel.TabIndex = 4;
+        repeatDays.Name = "reminderRepeatDays";
+        repeatDays.Minimum = 1;
+        repeatDays.Maximum = 365;
+        repeatDays.Value = 3;
+        repeatDays.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        repeatDays.Margin = new Padding(12, 6, 3, 6);
+        repeatDays.TabIndex = 1;
+        startTime.Name = "reminderStartTime";
+        startTime.Format = DateTimePickerFormat.Custom;
+        startTime.CustomFormat = "HH:mm";
+        startTime.ShowUpDown = true;
+        startTime.Value = new DateTime(2000, 1, 1, 10, 0, 0);
+        startTime.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        startTime.Margin = new Padding(12, 6, 3, 6);
+        startTime.TabIndex = 3;
+        endTime.Name = "reminderEndTime";
+        endTime.Format = DateTimePickerFormat.Custom;
+        endTime.CustomFormat = "HH:mm";
+        endTime.ShowUpDown = true;
+        endTime.Value = new DateTime(2000, 1, 1, 18, 0, 0);
+        endTime.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        endTime.Margin = new Padding(12, 6, 3, 6);
+        endTime.TabIndex = 5;
+        fields.Controls.Add(repeatLabel, 0, 0);
+        fields.Controls.Add(repeatDays, 1, 0);
+        fields.Controls.Add(startLabel, 0, 1);
+        fields.Controls.Add(startTime, 1, 1);
+        fields.Controls.Add(endLabel, 0, 2);
+        fields.Controls.Add(endTime, 1, 2);
+        notice.AutoSize = true;
+        notice.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        notice.Margin = new Padding(3, 16, 3, 12);
+        status.AutoSize = true;
+        status.Name = "reminderSettingsStatus";
+        status.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        buttons.AutoSize = true;
+        buttons.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        buttons.Anchor = AnchorStyles.Right;
+        buttons.FlowDirection = FlowDirection.RightToLeft;
+        buttons.TabIndex = 2;
+        save.Name = "reminderSettingsSave";
+        save.AutoSize = true;
+        save.MinimumSize = new Size(100, 32);
+        save.Enabled = false;
+        save.TabIndex = 0;
+        save.Click += SaveSettingsAsync;
+        cancel.Name = "reminderSettingsCancel";
+        cancel.AutoSize = true;
+        cancel.MinimumSize = new Size(100, 32);
+        cancel.DialogResult = DialogResult.Cancel;
+        cancel.TabIndex = 1;
+        buttons.Controls.Add(cancel);
+        buttons.Controls.Add(save);
+        root.Controls.Add(description, 0, 0);
+        root.Controls.Add(fields, 0, 1);
+        root.Controls.Add(notice, 0, 2);
+        root.Controls.Add(status, 0, 3);
+        root.Controls.Add(buttons, 0, 5);
+        AcceptButton = save;
+        CancelButton = cancel;
+        AutoScaleDimensions = new SizeF(96F, 96F);
+        AutoScaleMode = AutoScaleMode.Dpi;
+        ClientSize = new Size(600, 460);
+        MinimumSize = new Size(600, 460);
+        MaximizeBox = false;
+        MinimizeBox = false;
+        ShowInTaskbar = false;
+        StartPosition = FormStartPosition.CenterParent;
+        Name = "ReminderSettingsDialog";
+        Controls.Add(root);
+        ((System.ComponentModel.ISupportInitialize)repeatDays).EndInit();
+        fields.ResumeLayout(false);
+        fields.PerformLayout();
+        buttons.ResumeLayout(false);
+        buttons.PerformLayout();
+        root.ResumeLayout(false);
+        root.PerformLayout();
+        ResumeLayout(false);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing && !resourcesDisposed)
+        {
+            resourcesDisposed = true;
+            lifetime.Cancel();
+            lifetime.Dispose();
+        }
+        base.Dispose(disposing);
+    }
+
+    private TableLayoutPanel root;
+    private Label description;
+    private TableLayoutPanel fields;
+    private Label repeatLabel;
+    private Label startLabel;
+    private Label endLabel;
+    private NumericUpDown repeatDays;
+    private DateTimePicker startTime;
+    private DateTimePicker endTime;
+    private Label notice;
+    private Label status;
+    private FlowLayoutPanel buttons;
+    private Button save;
+    private Button cancel;
+}

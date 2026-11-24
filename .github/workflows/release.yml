@@ -1,0 +1,103 @@
+name: Release & Deploy
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Kodu al
+        uses: actions/checkout@v4
+
+      - name: .NET 8 kur
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Sürüm numarasını al
+        id: version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $ver = $tag.TrimStart('v')
+          echo "VERSION=$ver" >> $env:GITHUB_OUTPUT
+          echo "Sürüm: $ver"
+
+      - name: Derleme
+        shell: pwsh
+        run: |
+          dotnet publish ERSoftSMSBox.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -o publish_output `
+            --nologo
+
+      - name: ZIP oluştur
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "publish_output\*" -DestinationPath "ERSoftSMSBox.zip" -CompressionLevel Optimal
+          $mb = [math]::Round((Get-Item ERSoftSMSBox.zip).Length / 1MB, 1)
+          echo "Paket boyutu: $mb MB"
+
+      - name: GitHub Release oluştur
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "ERSoftSMSBox ${{ github.ref_name }}"
+          body: |
+            ## ERSoftSMSBox ${{ github.ref_name }}
+
+            Otomatik oluşturulmuş sürüm.
+          files: ERSoftSMSBox.zip
+          draft: false
+          prerelease: false
+
+      - name: Güncelleme sunucusuna yükle
+        shell: pwsh
+        env:
+          UPLOAD_SECRET: ${{ secrets.UPLOAD_SECRET }}
+          SERVER_URL: ${{ vars.UPDATE_SERVER_URL }}
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: |
+          $serverUrl = if ($env:SERVER_URL) { $env:SERVER_URL } else { "http://ec2-51-21-196-155.eu-north-1.compute.amazonaws.com:8080" }
+          $filePath = "ERSoftSMSBox.zip"
+          $fileName = "ERSoftSMSBox.zip"
+          $fileBytes = [System.IO.File]::ReadAllBytes($filePath)
+          $boundary = [System.Guid]::NewGuid().ToString()
+          $encoding = [System.Text.Encoding]::UTF8
+
+          $body = [System.IO.MemoryStream]::new()
+          $writer = [System.IO.StreamWriter]::new($body, $encoding)
+
+          $writer.Write("--$boundary`r`n")
+          $writer.Write("Content-Disposition: form-data; name=`"version`"`r`n`r`n")
+          $writer.Write("$($env:VERSION)`r`n")
+          $writer.Write("--$boundary`r`n")
+          $writer.Write("Content-Disposition: form-data; name=`"notes`"`r`n`r`n")
+          $writer.Write("GitHub Actions tarafindan otomatik yuklendi. Tag: ${{ github.ref_name }}`r`n")
+          $writer.Write("--$boundary`r`n")
+          $writer.Write("Content-Disposition: form-data; name=`"package`"; filename=`"$fileName`"`r`n")
+          $writer.Write("Content-Type: application/zip`r`n`r`n")
+          $writer.Flush()
+          $body.Write($fileBytes, 0, $fileBytes.Length)
+          $writer.Write("`r`n--$boundary--`r`n")
+          $writer.Flush()
+          $bodyBytes = $body.ToArray()
+          $body.Dispose()
+
+          $response = Invoke-RestMethod `
+            -Uri "$serverUrl/upload" `
+            -Method Post `
+            -Body $bodyBytes `
+            -ContentType "multipart/form-data; boundary=$boundary" `
+            -Headers @{ "X-Upload-Key" = $env:UPLOAD_SECRET } `
+            -TimeoutSec 120
+
+          echo "Sunucu yaniti: $($response | ConvertTo-Json)"
+          echo "Surüm $($env:VERSION) basariyla yuklendi."

@@ -1,0 +1,32 @@
+# Build output
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Publish output
+C:\ERSoftSMSBox/
+
+# Private key files
+*.pem
+*.pfx
+*.p12
+*.key
+
+# Local secrets / env
+.env
+*.local.json
+secrets.json
+appsettings.Local.json
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# NuGet
+*.nupkg
+packages/
+
+# Test results
+TestResults/

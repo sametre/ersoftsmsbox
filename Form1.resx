@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve"><value>ERSoft SMS Box</value></data>
+  <data name="HomePage" xml:space="preserve"><value>Ana Sayfa</value></data>
+  <data name="NavigationGroup" xml:space="preserve"><value>Çalışma Alanı</value></data>
+  <data name="HomeTitle" xml:space="preserve"><value>SMS yönetim merkezine hoş geldiniz</value></data>
+  <data name="HomeDescription" xml:space="preserve"><value>Üst menüden SMS işlemlerine, rehbere ve raporlara ulaşabilirsiniz.
+Görünüm sekmesinden uygulamanın temasını değiştirebilirsiniz.</value></data>
+  <data name="SmsPage" xml:space="preserve"><value>SMS İşlemleri</value></data>
+  <data name="SendGroup" xml:space="preserve"><value>Gönderim</value></data>
+  <data name="NewSms" xml:space="preserve"><value>Yeni SMS</value></data>
+  <data name="BulkSms" xml:space="preserve"><value>Toplu SMS</value></data>
+  <data name="NewSmsDescription" xml:space="preserve"><value>Listeden tek bir müşteri seçin; yalnızca o kişiye özel mesaj hazırlayın ve önizleyin.</value></data>
+  <data name="BulkSmsDescription" xml:space="preserve"><value>Ofis ve kategoriye göre müşterileri filtreleyin; seçilen alıcılara kişiselleştirilmiş mesajlar hazırlayın.</value></data>
+  <data name="SmsComposerUnavailable" xml:space="preserve"><value>Bu ekran yalnızca önizleme hazırlar. Gerçek SMS gönderimi ve teslimat sorgulaması henüz bağlı değildir. Önizleme oluşturmak SMS göndermez.</value></data>
+  <data name="SmsComposerMessage" xml:space="preserve"><value>Mesaj metni</value></data>
+  <data name="SmsComposerPreview" xml:space="preserve"><value>Önizle</value></data>
+  <data name="SmsComposerTemplate" xml:space="preserve"><value>Şablonu Uygula</value></data>
+  <data name="SmsComposerReplace" xml:space="preserve"><value>Yazdığınız mesaj seçilen şablonla değiştirilsin mi?</value></data>
+  <data name="SmsComposerInsertName" xml:space="preserve"><value>Ad Soyad Ekle</value></data>
+  <data name="SmsComposerClear" xml:space="preserve"><value>Mesajı Temizle</value></data>
+  <data name="SmsComposerClearConfirm" xml:space="preserve"><value>Yazdığınız mesaj temizlensin mi?</value></data>
+  <data name="SmsComposerNoRecipient" xml:space="preserve"><value>Önizleme için listeden müşteri seçin.</value></data>
+  <data name="SmsComposerRecipient" xml:space="preserve"><value>Alıcı: {0} | Cari: {1} | Telefon: {2}</value></data>
+  <data name="SmsComposerSelection" xml:space="preserve"><value>Seçilen alıcı: {0} | Mesaj karakteri: {1}</value></data>
+  <data name="SmsComposerResults" xml:space="preserve"><value>{0} müşteri listelendi. Mesaj göndermeden önce alıcı bilgilerini ve gerekli iletişim izinlerini doğrulayın.</value></data>
+  <data name="SmsComposerResultsLimited" xml:space="preserve"><value>İlk {0} müşteri listelendi; tüm sonuçlar gösterilmiyor. Arama veya ofis filtresini daraltın.</value></data>
+  <data name="ContactsPage" xml:space="preserve"><value>Rehber</value></data>
+  <data name="ContactsGroup" xml:space="preserve"><value>Kişi Yönetimi</value></data>
+  <data name="Contacts" xml:space="preserve"><value>Kişiler</value></data>
+  <data name="Groups" xml:space="preserve"><value>Gruplar</value></data>
+  <data name="ImportContacts" xml:space="preserve"><value>Rehber İçe Aktar</value></data>
+  <data name="ReportsPage" xml:space="preserve"><value>Raporlar</value></data>
+  <data name="ReportsGroup" xml:space="preserve"><value>Gönderim Takibi</value></data>
+  <data name="SentMessages" xml:space="preserve"><value>Gönderilen Mesajlar</value></data>
+  <data name="DeliveryReports" xml:space="preserve"><value>Teslimat Raporları</value></data>
+  <data name="SettingsPage" xml:space="preserve"><value>Ayarlar</value></data>
+  <data name="SettingsGroup" xml:space="preserve"><value>Yapılandırma</value></data>
+  <data name="ConnectionSettings" xml:space="preserve"><value>Bağlantı Ayarları</value></data>
+  <data name="ApplicationSettings" xml:space="preserve"><value>Uygulama Ayarları</value></data>
+  <data name="Exit" xml:space="preserve"><value>Arka Plana Al</value></data>
+  <data name="AppearancePage" xml:space="preserve"><value>Görünüm</value></data>
+  <data name="ThemeGroup" xml:space="preserve"><value>DevExpress Temaları</value></data>
+  <data name="SelectTheme" xml:space="preserve"><value>Tema Seç</value></data>
+  <data name="Ready" xml:space="preserve"><value>Hazır</value></data>
+  <data name="DesignStatus" xml:space="preserve"><value>Arayüz tasarımı</value></data>
+  <data name="ModuleDescription" xml:space="preserve"><value>{0} çalışma alanı.
+Bu bölümün işlevleri sonraki aşamada eklenecek.</value></data>
+  <data name="MenuAccessibleDescription" xml:space="preserve"><value>SMS yönetimi ve uygulama görünümü için üst menü.</value></data>
+  <data name="WorkspaceAccessibleName" xml:space="preserve"><value>Çalışma alanı</value></data>
+  <data name="WorkspaceAccessibleDescription" xml:space="preserve"><value>Seçilen menü bölümünün başlığını ve açıklamasını gösterir.</value></data>
+  <data name="QuickActions" xml:space="preserve"><value>Hızlı İşlemler</value></data>
+  <data name="QuickActionsDescription" xml:space="preserve"><value>Sık kullanılan SMS, rehber ve rapor çalışma alanlarına kısayollar.</value></data>
+  <data name="HomePageHint" xml:space="preserve"><value>Ana sayfayı ve hızlı işlemleri gösterir. Kısayol: Ctrl+Home.</value></data>
+  <data name="NewSmsHint" xml:space="preserve"><value>Yeni SMS çalışma alanını açar. Kısayol: Ctrl+N.</value></data>
+  <data name="BulkSmsHint" xml:space="preserve"><value>Birden fazla alıcı için toplu SMS çalışma alanını açar.</value></data>
+  <data name="ContactsHint" xml:space="preserve"><value>Rehberdeki kişilerin çalışma alanını açar. Kısayol: Ctrl+R.</value></data>
+  <data name="GroupsHint" xml:space="preserve"><value>Alıcı gruplarının çalışma alanını açar.</value></data>
+  <data name="ImportContactsHint" xml:space="preserve"><value>Rehber içe aktarma çalışma alanını açar.</value></data>
+  <data name="SentMessagesHint" xml:space="preserve"><value>Gönderilen mesajların çalışma alanını açar.</value></data>
+  <data name="DeliveryReportsHint" xml:space="preserve"><value>Mesaj teslimat raporlarının çalışma alanını açar.</value></data>
+  <data name="ConnectionSettingsHint" xml:space="preserve"><value>SMS sağlayıcısı bağlantı ayarlarının çalışma alanını açar.</value></data>
+  <data name="ApplicationSettingsHint" xml:space="preserve"><value>Uygulama tercihlerinin çalışma alanını açar.</value></data>
+  <data name="ExitHint" xml:space="preserve"><value>Pencereyi sistem tepsisine gizler; uygulama açık kalır.</value></data>
+  <data name="SelectThemeHint" xml:space="preserve"><value>DevExpress tema galerisinden uygulamanın görünümünü değiştirir.</value></data>
+  <data name="MissingMenuIcon" xml:space="preserve"><value>Menü ikonu yüklenemedi: {0}</value></data>
+  <data name="IntegrationsPage" xml:space="preserve"><value>Entegrasyonlar</value></data>
+  <data name="IntegrationsGroup" xml:space="preserve"><value>SMS Sağlayıcıları</value></data>
+  <data name="IntegrationProvider" xml:space="preserve"><value>SMS Sağlayıcısı</value></data>
+  <data name="IntegrationDescription" xml:space="preserve"><value>SMS sağlayıcısını seçin, hesap bilgilerini girin ve Bağlantıyı Kontrol Et ile doğrulayın. Her sağlayıcının ayarları ayrı saklanır; bağlantı kontrolü yalnız bakiye ve onaylı başlıkları okur, SMS göndermez.</value></data>
+  <data name="IntegrationSwitchUnsaved" xml:space="preserve"><value>Kaydedilmemiş değişiklikler var. {0} sağlayıcısına geçilirse bu değişiklikler kaybolacak. Devam edilsin mi?</value></data>
+  <data name="IletiMerkezi" xml:space="preserve"><value>İletişim Merkezi</value></data>
+  <data name="IletiMerkeziHint" xml:space="preserve"><value>İletişim Merkezi bağlantısını yapılandırın ve aktif/pasif durumunu yönetin.</value></data>
+  <data name="IletiMerkeziDescription" xml:space="preserve"><value>API anahtarı ve hash değerini İletişim Merkezi panelinden alın. Panelde API erişim iznini açın. Bağlantı kontrolü yalnız bakiye ve onaylı başlıkları okur; SMS göndermez.</value></data>
+  <data name="IletiMerkeziIdentifier" xml:space="preserve"><value>API Anahtarı</value></data>
+  <data name="IletiMerkeziSecret" xml:space="preserve"><value>API Hash</value></data>
+  <data name="IletiMerkeziAuthError" xml:space="preserve"><value>Kimlik doğrulanamadı (401). API anahtarını, hash değerini ve paneldeki API erişim iznini kontrol edin.</value></data>
+  <data name="IletiMerkeziNoSenders" xml:space="preserve"><value>Onaylı gönderici başlığı yok. İletişim Merkezi panelinden başlık onayı alın.</value></data>
+  <data name="NetGsm" xml:space="preserve"><value>NetGSM</value></data>
+  <data name="NetGsmHint" xml:space="preserve"><value>NetGSM bağlantısını yapılandırın ve aktif/pasif durumunu yönetin.</value></data>
+  <data name="NetGsmDescription" xml:space="preserve"><value>NetGSM portalında (Abonelik İşlemleri &gt; API İşlemleri) API erişimini açın ve bir API alt kullanıcısı oluşturun. Kullanıcı adı genellikle abone numaranızdır. Bağlantı kontrolü yalnız bakiye ve kayıtlı başlıkları okur; SMS göndermez.</value></data>
+  <data name="NetGsmIdentifier" xml:space="preserve"><value>Kullanıcı Adı (Abone No)</value></data>
+  <data name="NetGsmSecret" xml:space="preserve"><value>API Şifresi</value></data>
+  <data name="NetGsmAuthError" xml:space="preserve"><value>Kimlik doğrulanamadı (401). Kullanıcı adını, API şifresini, portaldaki API erişim iznini ve IP kısıtlamasını kontrol edin.</value></data>
+  <data name="NetGsmNoSenders" xml:space="preserve"><value>Kullanılabilir gönderici başlığı yok. NetGSM portalından başlık tanımlayın ve yönlendirme kodunu kontrol edin.</value></data>
+  <data name="NetGsmApiError" xml:space="preserve"><value>NetGSM isteği reddetti. HTTP {0}, hata kodu: {1}</value></data>
+  <data name="EyfelSoft" xml:space="preserve"><value>Eyfelsoft</value></data>
+  <data name="EyfelSoftHint" xml:space="preserve"><value>Eyfelsoft SMS API bağlantısını yapılandırın.</value></data>
+  <data name="EyfelSoftDescription" xml:space="preserve"><value>Eyfelsoft hesabınızdan aldığınız PHP endpoint URL'sini girin. Bağlantı kontrolü yalnız erişilebilirliği denetler; SMS göndermez.</value></data>
+  <data name="EyfelSoftIdentifier" xml:space="preserve"><value>API URL</value></data>
+  <data name="EyfelSoftSender" xml:space="preserve"><value>Gönderen başlık</value></data>
+  <data name="EyfelSoftApiError" xml:space="preserve"><value>Eyfelsoft API hatası: {0}</value></data>
+  <data name="EyfelSoftUrlRequired" xml:space="preserve"><value>API URL'si boş olamaz. Eyfelsoft hesabınızdan aldığınız endpoint adresini girin.</value></data>
+  <data name="EyfelSoftApiSection" xml:space="preserve"><value>Eyfelsoft SMS API</value></data>
+  <data name="EyfelSoftApiUrl" xml:space="preserve"><value>API adresi (URL)</value></data>
+  <data name="BulkSelectAll" xml:space="preserve"><value>Tümünü Seç</value></data>
+  <data name="BulkDeselectAll" xml:space="preserve"><value>Seçimi Kaldır</value></data>
+  <data name="SmsComposerPresets" xml:space="preserve"><value>Hazır Şablonlar</value></data>
+  <data name="SmsComposerPresetsPlaceholder" xml:space="preserve"><value>— şablon seçin —</value></data>
+  <data name="SmsComposerInsert" xml:space="preserve"><value>Hızlı ekle:</value></data>
+  <data name="SmsComposerInsertCariKodu" xml:space="preserve"><value>Cari Kodu Ekle</value></data>
+  <data name="SmsComposerInsertBorc" xml:space="preserve"><value>Borç Ekle</value></data>
+  <data name="SmsComposerInsertGun" xml:space="preserve"><value>Gün Ekle</value></data>
+  <data name="SmsComposerInsertOfis" xml:space="preserve"><value>Ofis Ekle</value></data>
+  <data name="SmsComposerInsertDogumGunu" xml:space="preserve"><value>Doğum Günü Ekle</value></data>
+  <data name="PresetGenelAd" xml:space="preserve"><value>Genel hatırlatma</value></data>
+  <data name="PresetGenel" xml:space="preserve"><value>Sayın {AdSoyad}, {Ofis} mağazamızda {Borc} TL tutarında bekleyen bakiyeniz bulunmaktadır. Ödeme için ofisimizi ziyaret edebilirsiniz.</value></data>
+  <data name="PresetGecikmeAd" xml:space="preserve"><value>Gecikmiş borç bildirimi</value></data>
+  <data name="PresetGecikme" xml:space="preserve"><value>Sayın {AdSoyad}, {Gun} gündür gecikmiş {Borc} TL tutarındaki borcunuzu en kısa sürede ödemenizi bekleriz.</value></data>
+  <data name="PresetVadeAd" xml:space="preserve"><value>Vade yaklaşıyor</value></data>
+  <data name="PresetVade" xml:space="preserve"><value>Sayın {AdSoyad}, {Borc} TL tutarındaki taksitinizin vade tarihi yaklaşmaktadır. Zamanında ödeyerek gecikme faizinden korunun.</value></data>
+  <data name="PresetAcilAd" xml:space="preserve"><value>Acil tahsilat uyarısı</value></data>
+  <data name="PresetAcil" xml:space="preserve"><value>Sayın {AdSoyad}, vadesi geçmiş {Borc} TL tutarındaki borcunuz için hukuki işlem sürecine girilecektir. Lütfen en kısa sürede iletişime geçiniz.</value></data>
+  <data name="PresetSonUyariAd" xml:space="preserve"><value>Son ödeme uyarısı</value></data>
+  <data name="PresetSonUyari" xml:space="preserve"><value>Sayın {AdSoyad}, {Gun} gündür bekleyen {Borc} TL tutarındaki borcunuz için son bilgilendirmedir. Bilgi için ofisimizi arayınız.</value></data>
+  <data name="PresetOdemeAd" xml:space="preserve"><value>Ödeme teşekkürü</value></data>
+  <data name="PresetOdeme" xml:space="preserve"><value>Sayın {AdSoyad}, {Ofis} mağazamıza yaptığınız ödeme alınmıştır. Teşekkür ederiz.</value></data>
+  <data name="PresetDogumGunuAd" xml:space="preserve"><value>Doğum günü kutlaması</value></data>
+  <data name="PresetDogumGunu" xml:space="preserve"><value>Sevgili {AdSoyad}, {DogumGunu} doğum gününüzü kutlar, nice sağlıklı ve mutlu yıllar dileriz. {Ofis}</value></data>
+  <data name="PresetIletisimAd" xml:space="preserve"><value>İletişim talebi</value></data>
+  <data name="PresetIletisim" xml:space="preserve"><value>Sayın {AdSoyad}, {Ofis} mağazamızdan size ulaşıyoruz. Hesabınızla ilgili önemli bilgilendirme için ofisimizi aramanızı rica ederiz.</value></data>
+  <data name="IntegrationEnabled" xml:space="preserve"><value>Entegrasyon aktif</value></data>
+  <data name="IntegrationActive" xml:space="preserve"><value>Aktif</value></data>
+  <data name="IntegrationInactive" xml:space="preserve"><value>Pasif — API isteği yapılmaz.</value></data>
+  <data name="IntegrationUnsaved" xml:space="preserve"><value>Değişiklikler henüz kaydedilmedi.</value></data>
+  <data name="IntegrationSender" xml:space="preserve"><value>Gönderici Başlığı</value></data>
+  <data name="IntegrationSave" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="IntegrationTest" xml:space="preserve"><value>Bağlantıyı Kontrol Et</value></data>
+  <data name="IntegrationCancel" xml:space="preserve"><value>İşlemi İptal Et</value></data>
+  <data name="IntegrationSaved" xml:space="preserve"><value>Ayarlar bu Windows kullanıcısı için şifrelenerek kaydedildi. Durum: {0}</value></data>
+  <data name="IntegrationBusy" xml:space="preserve"><value>İşlem devam ediyor…</value></data>
+  <data name="IntegrationSuccess" xml:space="preserve"><value>Bağlantı başarılı. Bakiye: {0:N3} TL | SMS: {1:N0} | Onaylı başlık: {2}</value></data>
+  <data name="IntegrationCancelled" xml:space="preserve"><value>İşlem iptal edildi. Kaydedilmemiş değişiklikler uygulanmadı.</value></data>
+  <data name="IntegrationCredentialsRequired" xml:space="preserve"><value>Aktif entegrasyon için {0} ve {1} alanları zorunludur.</value></data>
+  <data name="IntegrationDisabledError" xml:space="preserve"><value>Entegrasyon pasif. API isteği yapılmadı.</value></data>
+  <data name="IntegrationApiError" xml:space="preserve"><value>{0} isteği reddetti. Durum kodu: {1}</value></data>
+  <data name="IntegrationInvalidResponse" xml:space="preserve"><value>{0} beklenen biçimde yanıt vermedi.</value></data>
+  <data name="IntegrationNetworkError" xml:space="preserve"><value>Sunucuya ulaşılamadı. İnternet bağlantısını kontrol edin ve yeniden deneyin.</value></data>
+  <data name="IntegrationHttpError" xml:space="preserve"><value>Sunucu HTTP {0} hatası döndürdü.</value></data>
+  <data name="IntegrationTimeout" xml:space="preserve"><value>İstek zaman aşımına uğradı. Yeniden deneyebilirsiniz.</value></data>
+  <data name="IntegrationStorageInvalid" xml:space="preserve"><value>Kaydedilen entegrasyon ayarları geçerli değil.</value></data>
+  <data name="IntegrationStorageError" xml:space="preserve"><value>Ayarlar okunamadı veya kaydedilemedi. Dosya erişim izinlerini kontrol edin.</value></data>
+  <data name="IntegrationDecryptError" xml:space="preserve"><value>Ayarların şifresi bu Windows hesabıyla çözülemedi. Bilgileri yeniden girip kaydedin.</value></data>
+  <data name="IntegrationSecurityNote" xml:space="preserve"><value>Bilgiler yalnız bu Windows hesabıyla açılabilir. Aktif/pasif değişikliklerini kalıcı yapmak için Kaydet düğmesini kullanın. Bağlantı kontrolü ekrandaki bilgilerle çalışır.</value></data>
+  <data name="IntegrationSenderInvalid" xml:space="preserve"><value>Gönderici başlığı onaylı başlık listesinde bulunmuyor. Listeden bir başlık seçin.</value></data>
+  <data name="OfficesPage" xml:space="preserve"><value>Ofis Yönetimi</value></data>
+  <data name="OfficesGroup" xml:space="preserve"><value>Şube İşlemleri</value></data>
+  <data name="Offices" xml:space="preserve"><value>Ofisler</value></data>
+  <data name="OfficesHint" xml:space="preserve"><value>Ofis bazında müşteri, telefon, borç ve gönderim özetini gösterir.</value></data>
+  <data name="OfficesDescription" xml:space="preserve"><value>Her ofisteki müşteri sayısı, telefonu olan müşteriler, borçlu sayısı, toplam bakiye ve gönderilen SMS adedi. Bir ofise çift tıklayarak müşterilerine geçin.</value></data>
+  <data name="Customers" xml:space="preserve"><value>Müşteriler</value></data>
+  <data name="CustomersHint" xml:space="preserve"><value>Ofis ve mesaj kategorisine göre müşterileri listeler, SMS taslağı hazırlar. Kısayol: Ctrl+R.</value></data>
+  <data name="CustomersDescription" xml:space="preserve"><value>Ofis ve kategori seçin: vadesi geçmiş borç, 5/10/15/20/30/45/60 gün vade aralıkları, doğum günü veya telefonu eksik müşteriler. Seçtiğiniz kayıtlardan kategoriye özel şablonla SMS taslağı hazırlanır; bu ekran SMS göndermez.</value></data>
+  <data name="PhoneBook" xml:space="preserve"><value>Telefon Rehberi</value></data>
+  <data name="PhoneBookHint" xml:space="preserve"><value>Müşteri telefon numaralarını ofislere göre gruplar ve dışa aktarır.</value></data>
+  <data name="PhoneBookDescription" xml:space="preserve"><value>BBSoft'un Nebim'den aktardığı tüm müşteri telefonları ofis bazında gruplanır. Listeyi CSV olarak dışa aktarabilirsiniz.</value></data>
+  <data name="SentSms" xml:space="preserve"><value>Gönderilen SMS'ler</value></data>
+  <data name="SentSmsHint" xml:space="preserve"><value>Kime, hangi ofisten, ne zaman SMS gittiğini gösterir.</value></data>
+  <data name="SentSmsDescription" xml:space="preserve"><value>BBSoft gönderim günlüğü (GonderilenSSMler). Üstte ofis ve tarih bazında özet, altta müşteri detayı. Özetten bir satır seçince detay o ofis ve güne süzülür.</value></data>
+  <data name="Templates" xml:space="preserve"><value>Mesaj Şablonları</value></data>
+  <data name="TemplatesHint" xml:space="preserve"><value>Vade, doğum günü ve genel SMS şablonlarını düzenler.</value></data>
+  <data name="TemplatesDescription" xml:space="preserve"><value>Her mesaj kategorisi için ayrı şablon. Şablonlar bu bilgisayarda saklanır; Müşteriler ekranında kategori seçilince otomatik uygulanır.</value></data>
+  <data name="DatabaseSettings" xml:space="preserve"><value>Veritabanı Ayarları</value></data>
+  <data name="DatabaseSettingsHint" xml:space="preserve"><value>BBSoft ile aynı SQL sunucusu, veritabanı ve kullanıcı bilgileri.</value></data>
+  <data name="DatabaseDescription" xml:space="preserve"><value>BBSoft ile aynı yol izlenir: program klasöründeki Ayarlar.INI'den [Dizin] SabitlerDizini okunur, [SQL] ServerName / GenelDatabaseName / SQLUserName / SQLPassword değerleri SabitlerDizini\Ayarlar.INI'den alınır. Bağlantı BBSoft'un BDE parametreleriyle (sorgu süresi 300 sn, paket 4096, Türkçe dil) kurulur; veritabanına yazılmaz.</value></data>
+  <data name="DatabaseServer" xml:space="preserve"><value>SQL sunucusu (ServerName)</value></data>
+  <data name="DatabaseName" xml:space="preserve"><value>Veritabanı (GenelDatabaseName)</value></data>
+  <data name="DatabaseUser" xml:space="preserve"><value>SQL kullanıcı (SQLUserName)</value></data>
+  <data name="DatabasePassword" xml:space="preserve"><value>SQL parola (SQLPassword)</value></data>
+  <data name="DatabaseOfficeCode" xml:space="preserve"><value>Ofis kodu</value></data>
+  <data name="DatabaseAuthentication" xml:space="preserve"><value>Kimlik doğrulama</value></data>
+  <data name="DatabaseWindows" xml:space="preserve"><value>Windows hesabını kullan (BBSoft SQL kullanıcısı yerine)</value></data>
+  <data name="DatabaseSecurity" xml:space="preserve"><value>Bağlantı güvenliği</value></data>
+  <data name="DatabaseTrustCertificate" xml:space="preserve"><value>Sunucu sertifikasına güven (şifreleme isteyen sunucular için)</value></data>
+  <data name="DatabaseTrustCertificateHelp" xml:space="preserve"><value>BBSoft gibi şifreleme zorunlu tutulmaz. Sunucu şifreleme isterse ve sertifikası geçersizse bu seçeneği açın.</value></data>
+  <data name="DatabaseImport" xml:space="preserve"><value>Ayarlar.INI'den Al</value></data>
+  <data name="DatabaseImportFilter" xml:space="preserve"><value>INI dosyaları (*.ini)|*.ini|Tüm dosyalar (*.*)|*.*</value></data>
+  <data name="DatabaseImported" xml:space="preserve"><value>{0} dosyasından BBSoft bağlantı ayarları alındı (SabitlerDizini tanımlıysa [SQL] bölümü oradaki Ayarlar.INI'den okundu). Bağlan ile doğrulayıp Kaydet ile saklayın.</value></data>
+  <data name="DatabaseImportInvalid" xml:space="preserve"><value>Seçilen dosya BBSoft Ayarlar.INI biçiminde değil ([SQL] bölümü bulunamadı) veya okunamadı.</value></data>
+  <data name="DatabaseConnect" xml:space="preserve"><value>Bağlan</value></data>
+  <data name="DatabaseSave" xml:space="preserve"><value>Ayarları Kaydet</value></data>
+  <data name="DatabaseRead" xml:space="preserve"><value>Listele</value></data>
+  <data name="DatabaseDisconnected" xml:space="preserve"><value>Veritabanına bağlı değil</value></data>
+  <data name="DatabaseConnectedStatus" xml:space="preserve"><value>BBSoft veritabanına bağlı — salt okunur</value></data>
+  <data name="DatabaseScreenSettings" xml:space="preserve"><value>BBSoft Ekran Tanımlama (EkranTanimlama)</value></data>
+  <data name="DatabaseScreenSettingsHelp" xml:space="preserve"><value>Bağlandıktan sonra BBSoft'un mesaj aşamaları, vade günleri, Nebim veritabanı adı ve kefil ayarı burada gösterilir.</value></data>
+  <data name="DatabaseStageLine" xml:space="preserve"><value>Mesaj {0}: {1} gün — {2}</value></data>
+  <data name="DatabaseStageNoText" xml:space="preserve"><value>(metin tanımlı değil)</value></data>
+  <data name="DatabaseNebimLine" xml:space="preserve"><value>Nebim veritabanı (VeriAlinacakDatabases): {0}</value></data>
+  <data name="DatabaseNebimMissing" xml:space="preserve"><value>tanımlı değil — doğum günü kategorisi kullanılamaz</value></data>
+  <data name="DatabaseGuarantorOn" xml:space="preserve"><value>Kefile SMS gönder: açık</value></data>
+  <data name="DatabaseGuarantorOff" xml:space="preserve"><value>Kefile SMS gönder: kapalı</value></data>
+  <data name="DatabaseBirthdayNeedsNebim" xml:space="preserve"><value>Doğum günü kategorisi için EkranTanimlama.VeriAlinacakDatabases alanında Nebim veritabanı adı tanımlı olmalıdır.</value></data>
+  <data name="DatabaseOffice" xml:space="preserve"><value>Ofis / mağaza</value></data>
+  <data name="DatabaseAllOffices" xml:space="preserve"><value>Tüm ofisler</value></data>
+  <data name="DatabaseSearch" xml:space="preserve"><value>Ara (kod / ad / telefon)</value></data>
+  <data name="DatabaseCustomerCode" xml:space="preserve"><value>Müşteri kodu</value></data>
+  <data name="DatabaseFullName" xml:space="preserve"><value>Adı soyadı</value></data>
+  <data name="DatabasePhone" xml:space="preserve"><value>Telefon</value></data>
+  <data name="DatabaseDebt" xml:space="preserve"><value>Kalan borç</value></data>
+  <data name="DatabaseReferenceDate" xml:space="preserve"><value>Son ödeme / vade</value></data>
+  <data name="DatabaseTemplate" xml:space="preserve"><value>SMS şablonu</value></data>
+  <data name="DatabaseTemplateHelp" xml:space="preserve"><value>Alanlar: {AdSoyad}, {CariKodu}, {Ofis}, {Borc}, {Gun}, {DogumGunu}. En fazla 1000 karakter.</value></data>
+  <data name="DatabasePrepare" xml:space="preserve"><value>Seçilenlerden Taslak Hazırla</value></data>
+  <data name="DatabasePreview" xml:space="preserve"><value>SMS taslak önizlemesi</value></data>
+  <data name="DatabaseSafetyNote" xml:space="preserve"><value>Bağlantı otomatik açılmaz. Parola bu Windows hesabına bağlı şifrelenerek saklanır. Uygulama veritabanına yazmaz.</value></data>
+  <data name="DatabaseSettingsRequired" xml:space="preserve"><value>Sunucu ve veritabanı adını girin. SQL kimlik doğrulamasında kullanıcı adı ve parola zorunludur.</value></data>
+  <data name="DatabaseFilterInvalid" xml:space="preserve"><value>Filtreleri kontrol edin: arama en fazla 100 karakter, başlangıç tarihi bitişten önce olmalıdır.</value></data>
+  <data name="DatabaseSaved" xml:space="preserve"><value>Bağlantı ayarları bu Windows kullanıcısına bağlı olarak şifrelenip kaydedildi.</value></data>
+  <data name="DatabaseConnected" xml:space="preserve"><value>Bağlantı başarılı: {0} ofis, {1:n0} müşteri. Sunucu zamanı: {2}. Ofis Yönetimi sekmelerini kullanabilirsiniz.</value></data>
+  <data name="DatabaseResults" xml:space="preserve"><value>{0:n0} müşteri listelendi ({1}). Toplam bakiye: {2:n2} TL.</value></data>
+  <data name="DatabaseResultsLimited" xml:space="preserve"><value>İlk {0:n0} müşteri gösteriliyor ({1}); daha fazla kayıt var, filtreyi daraltın. Toplam bakiye (gösterilen): {2:n2} TL.</value></data>
+  <data name="DatabaseCancelled" xml:space="preserve"><value>İşlem iptal edildi veya zaman sınırı aşıldı.</value></data>
+  <data name="DatabaseSqlError" xml:space="preserve"><value>SQL hatası (kod {0}): {1}</value></data>
+  <data name="DatabaseSchemaError" xml:space="preserve"><value>Veritabanı şeması veya alan türleri BBSoft ile eşleşmiyor. Tablo ve alanları kontrol edin.</value></data>
+  <data name="DatabaseStorageError" xml:space="preserve"><value>Yerel ayar dosyası okunamadı veya yazılamadı.</value></data>
+  <data name="DatabaseOfficeLimit" xml:space="preserve"><value>Ofis listesi güvenli sınırı aşıyor. Veritabanı ve ofis eşleşmelerini kontrol edin.</value></data>
+  <data name="DatabaseFiltersChanged" xml:space="preserve"><value>Bağlantı ayarları değişti. Yeniden bağlanın.</value></data>
+  <data name="DatabaseDraftSummary" xml:space="preserve"><value>{0} SMS taslağı hazırlandı. Geçersiz telefon: {1}; aynı numaraya bağlı çakışan kayıt: {2}. Hiçbir SMS gönderilmedi.</value></data>
+  <data name="OfficeConnectFirst" xml:space="preserve"><value>Önce Veritabanı Ayarları ekranından BBSoft veritabanına bağlanın.</value></data>
+  <data name="OfficeReady" xml:space="preserve"><value>Bağlantı hazır. Listele ile verileri getirin.</value></data>
+  <data name="OfficeFindPrompt" xml:space="preserve"><value>Listede ara…</value></data>
+  <data name="OfficeRefresh" xml:space="preserve"><value>Yenile</value></data>
+  <data name="OfficeShowCustomers" xml:space="preserve"><value>Ofisin Müşterileri</value></data>
+  <data name="OfficeCount" xml:space="preserve"><value>{0} ofis, toplam {1:n0} müşteri.</value></data>
+  <data name="OfficeCustomerCount" xml:space="preserve"><value>Müşteri</value></data>
+  <data name="OfficeWithPhoneCount" xml:space="preserve"><value>Telefonu olan</value></data>
+  <data name="OfficeDebtorCount" xml:space="preserve"><value>Borçlu</value></data>
+  <data name="OfficeTotalDebt" xml:space="preserve"><value>Toplam bakiye</value></data>
+  <data name="OfficeLegalCount" xml:space="preserve"><value>Avukatlık</value></data>
+  <data name="OfficeSentCount" xml:space="preserve"><value>Gönderilen SMS</value></data>
+  <data name="OfficeLastSentDate" xml:space="preserve"><value>Son gönderim</value></data>
+  <data name="CustomerCategory" xml:space="preserve"><value>Mesaj kategorisi</value></data>
+  <data name="CustomerRequirePhone" xml:space="preserve"><value>Sadece telefonu olanlar</value></data>
+  <data name="CustomerPhoneCount" xml:space="preserve"><value>Tel. adedi</value></data>
+  <data name="CustomerDaysOverdue" xml:space="preserve"><value>Geçen gün</value></data>
+  <data name="CustomerDueBucket" xml:space="preserve"><value>Vade aralığı</value></data>
+  <data name="CustomerStage" xml:space="preserve"><value>BBSoft aşaması</value></data>
+  <data name="CustomerLastPaymentDate" xml:space="preserve"><value>Son ödeme tarihi</value></data>
+  <data name="CustomerDueDate" xml:space="preserve"><value>Vade tarihi</value></data>
+  <data name="CustomerControlDate" xml:space="preserve"><value>Kontrol tarihi</value></data>
+  <data name="CustomerRecordedPaymentDate" xml:space="preserve"><value>BBSoft kayıtlı ödeme tarihi</value></data>
+  <data name="CustomerPaymentChanged" xml:space="preserve"><value>Kontrol tarihi değişmiş</value></data>
+  <data name="CustomerLastReminderDate" xml:space="preserve"><value>BBSoft son hatırlatma</value></data>
+  <data name="CustomerReminderReferenceDate" xml:space="preserve"><value>Hatırlatma esas tarihi</value></data>
+  <data name="CustomerMessageCheck" xml:space="preserve"><value>Mesaj kontrolü gerekli</value></data>
+  <data name="CustomerReminderCheck" xml:space="preserve"><value>Borç/aşama kontrolü gerekli</value></data>
+  <data name="CustomerDateRule" xml:space="preserve"><value>Kontrol tarihi, son ödeme ile vade tarihinin büyük olanıdır. Eski 20.06.1965 işaret tarihi boş gösterilir. Kontrol bayrakları gönderim izni değildir; bu ekran kayıt veya SMS aşaması değiştirmez.</value></data>
+  <data name="CustomerLegal" xml:space="preserve"><value>Avukatlık</value></data>
+  <data name="CustomerBirthDate" xml:space="preserve"><value>Doğum tarihi</value></data>
+  <data name="CustomerDaysToBirthday" xml:space="preserve"><value>Doğum gününe</value></data>
+  <data name="CategoryAllCustomers" xml:space="preserve"><value>Tüm müşteriler</value></data>
+  <data name="CategoryOverdue" xml:space="preserve"><value>Vadesi geçmiş borç (tümü)</value></data>
+  <data name="CategoryDue5" xml:space="preserve"><value>Vadeli 1–5 gün</value></data>
+  <data name="CategoryDue10" xml:space="preserve"><value>Vadeli 6–10 gün</value></data>
+  <data name="CategoryDue15" xml:space="preserve"><value>Vadeli 11–15 gün</value></data>
+  <data name="CategoryDue20" xml:space="preserve"><value>Vadeli 16–20 gün</value></data>
+  <data name="CategoryDue30" xml:space="preserve"><value>Vadeli 21–30 gün</value></data>
+  <data name="CategoryDue45" xml:space="preserve"><value>Vadeli 31–45 gün</value></data>
+  <data name="CategoryDue60" xml:space="preserve"><value>Vadeli 46–60 gün</value></data>
+  <data name="CategoryDue60Plus" xml:space="preserve"><value>Vadeli 60 gün üzeri</value></data>
+  <data name="CategoryBirthdayToday" xml:space="preserve"><value>Doğum günü bugün</value></data>
+  <data name="CategoryBirthdayWeek" xml:space="preserve"><value>Doğum günü 7 gün içinde</value></data>
+  <data name="CategoryBirthdayMonth" xml:space="preserve"><value>Doğum günü 30 gün içinde</value></data>
+  <data name="CategoryMissingPhone" xml:space="preserve"><value>Telefonu olmayanlar</value></data>
+  <data name="PhoneDescription" xml:space="preserve"><value>Telefon türü</value></data>
+  <data name="PhoneGroupCount" xml:space="preserve"><value>{0} numara</value></data>
+  <data name="PhoneExport" xml:space="preserve"><value>CSV'ye Aktar</value></data>
+  <data name="PhoneExportFilter" xml:space="preserve"><value>CSV dosyası (*.csv)|*.csv</value></data>
+  <data name="PhoneExportEmpty" xml:space="preserve"><value>Dışa aktarılacak telefon listesi yok. Önce Listele'yi kullanın.</value></data>
+  <data name="PhoneExported" xml:space="preserve"><value>{0:n0} telefon kaydı {1} dosyasına aktarıldı.</value></data>
+  <data name="PhoneResults" xml:space="preserve"><value>{0:n0} telefon numarası, {1:n0} müşteri.</value></data>
+  <data name="PhoneResultsLimited" xml:space="preserve"><value>İlk {0:n0} telefon numarası gösteriliyor ({1:n0} müşteri); daha fazla kayıt var, ofis seçin veya arama yapın.</value></data>
+  <data name="SentDate" xml:space="preserve"><value>Gönderim tarihi</value></data>
+  <data name="SentTime" xml:space="preserve"><value>Saat</value></data>
+  <data name="SentCount" xml:space="preserve"><value>Adet</value></data>
+  <data name="SentId" xml:space="preserve"><value>Sağlayıcı ID</value></data>
+  <data name="SentFrom" xml:space="preserve"><value>Başlangıç</value></data>
+  <data name="SentTo" xml:space="preserve"><value>Bitiş</value></data>
+  <data name="SentClearFilter" xml:space="preserve"><value>Süzmeyi Kaldır</value></data>
+  <data name="SentResults" xml:space="preserve"><value>{0:n0} gönderim kaydı listelendi; özet: {1:n0} SMS, {2} ofis/gün satırı.</value></data>
+  <data name="SentResultsLimited" xml:space="preserve"><value>İlk {0:n0} gönderim kaydı gösteriliyor (özet toplamı {1:n0} SMS, {2} satır); tarih aralığını daraltın.</value></data>
+  <data name="SentDetailCount" xml:space="preserve"><value>Detayda {0:n0} kayıt gösteriliyor.</value></data>
+  <data name="TemplateHelp" xml:space="preserve"><value>Kullanılabilir alanlar: {0}. {{Gun}} = son ödemeden/vadeden bu yana geçen gün, {{DogumGunu}} = gün ve ay. En fazla 1000 karakter; Türkçe karakterler SMS maliyetini artırabilir.</value></data>
+  <data name="TemplateSave" xml:space="preserve"><value>Şablonları Kaydet</value></data>
+  <data name="TemplateReset" xml:space="preserve"><value>Varsayılana Dön</value></data>
+  <data name="TemplateReady" xml:space="preserve"><value>Soldan bir kategori seçip şablonu düzenleyin. Değişiklikler Şablonları Kaydet ile bu bilgisayarda saklanır.</value></data>
+  <data name="TemplateSaved" xml:space="preserve"><value>Şablonlar kaydedildi.</value></data>
+  <data name="TemplateLoadError" xml:space="preserve"><value>Kayıtlı şablonlar okunamadı; varsayılan şablonlar kullanılıyor.</value></data>
+  <data name="TemplateDefaultDue" xml:space="preserve"><value>Sayın {AdSoyad}, {Ofis} mağazamıza {Gun} günden beri ödeme yapılmamıştır. Toplam bakiyeniz {Borc} TL'dir. Lütfen 15 gün içinde gecikmiş borcunuzu ödeyiniz.</value></data>
+  <data name="TemplateDefaultBirthday" xml:space="preserve"><value>Sayın {AdSoyad}, doğum gününüzü kutlar, sağlıklı ve mutlu bir yıl dileriz. {Ofis}</value></data>
+  <data name="TemplateDefaultGeneral" xml:space="preserve"><value>Sayın {AdSoyad}, {Ofis} mağazamızdaki kayıtlı bakiyeniz {Borc} TL'dir. Bilgi almak için mağazamızla iletişime geçebilirsiniz.</value></data>
+  <data name="SmsTemplateInvalid" xml:space="preserve"><value>Şablon boş olamaz, en fazla 1000 karakter olabilir. Yalnız {AdSoyad}, {CariKodu}, {Ofis}, {Borc}, {Gun}, {DogumGunu} alanlarını kullanın.</value></data>
+  <data name="SmsDraftTooLong" xml:space="preserve"><value>Kişiselleştirilmiş mesaj 1000 karakter sınırını aşıyor. Şablonu kısaltın.</value></data>
+  <data name="SmsSelectionRequired" xml:space="preserve"><value>Taslak için 1 ile 500 arasında alıcı seçin.</value></data>
+  <data name="StartupLoading" xml:space="preserve"><value>SMS yönetim merkeziniz açılıyor…</value></data>
+  <data name="TrayOpen" xml:space="preserve"><value>Programı &amp;Aç</value></data>
+  <data name="TrayOpenDescription" xml:space="preserve"><value>Ana pencereyi yeniden gösterir.</value></data>
+  <data name="TrayExit" xml:space="preserve"><value>&amp;Tamamen Çıkış</value></data>
+  <data name="TrayExitDescription" xml:space="preserve"><value>Onayınızla uygulamayı ve arka plan işlemlerini sonlandırır.</value></data>
+  <data name="TrayExitConfirm" xml:space="preserve"><value>Uygulama ve devam eden işlemler kapanacak. Kaydedilmemiş değişiklikler kaybolabilir. Çıkmak istiyor musunuz?</value></data>
+  <data name="TrayBackground" xml:space="preserve"><value>Uygulama arka planda açık. Yeniden açmak için saat yanındaki simgeye çift tıklayın.</value></data>
+  <data name="ReminderSettingsTitle" xml:space="preserve"><value>Uygulama Ayarları — Hatırlatma Zamanları</value></data>
+  <data name="ReminderSettingsDescription" xml:space="preserve"><value>Hatırlatmanın kaç günde bir ve hangi saat aralığında yapılacağını belirleyin. Saatler bilgisayarın yerel saatidir; gece yarısını aşan aralık desteklenmez.</value></data>
+  <data name="ReminderRepeatDays" xml:space="preserve"><value>Tekrar aralığı (gün)</value></data>
+  <data name="ReminderStartTime" xml:space="preserve"><value>Başlangıç saati</value></data>
+  <data name="ReminderEndTime" xml:space="preserve"><value>Bitiş saati</value></data>
+  <data name="ReminderDaysHelp" xml:space="preserve"><value>1–365 gün arasında bir tekrar aralığı seçin.</value></data>
+  <data name="ReminderHoursHelp" xml:space="preserve"><value>Saat ve dakikayı belirleyin. Bitiş saati başlangıç saatinden sonra olmalıdır.</value></data>
+  <data name="ReminderSettingsNotice" xml:space="preserve"><value>Bu ekran yalnızca zamanlama tercihlerini kaydeder. Otomatik SMS gönderim motoru henüz bağlı değildir; ayarları kaydetmek mesaj göndermez.</value></data>
+  <data name="ReminderSettingsSave" xml:space="preserve"><value>&amp;Kaydet</value></data>
+  <data name="ReminderSettingsCancel" xml:space="preserve"><value>&amp;İptal</value></data>
+  <data name="ReminderSettingsLoading" xml:space="preserve"><value>Ayarlar yükleniyor…</value></data>
+  <data name="ReminderSettingsSaving" xml:space="preserve"><value>Ayarlar kaydediliyor…</value></data>
+  <data name="ReminderSettingsLoadError" xml:space="preserve"><value>Ayarlar yüklenemedi. Dosyayı ve erişim izinlerini kontrol edin. Mevcut kayıt korunması için Kaydet devre dışı bırakıldı.</value></data>
+  <data name="ReminderSettingsSaveError" xml:space="preserve"><value>Ayarlar kaydedilemedi. Dosya erişim izinlerini kontrol edip yeniden deneyin.</value></data>
+  <data name="ReminderSettingsInvalid" xml:space="preserve"><value>Hatırlatma ayar dosyası geçersiz.</value></data>
+  <data name="ReminderDaysInvalid" xml:space="preserve"><value>Tekrar aralığı 1–365 gün arasında olmalıdır.</value></data>
+  <data name="ReminderHoursInvalid" xml:space="preserve"><value>Bitiş saati başlangıçtan sonra olmalıdır. Saatleri dakika hassasiyetinde seçin.</value></data>
+  <data name="AppUpdate" xml:space="preserve"><value>Güncelleme Al</value></data>
+  <data name="AppUpdateHint" xml:space="preserve"><value>Sunucudaki en yeni sürümü kontrol edip uygulamayı günceller.</value></data>
+  <data name="UpdateCheck" xml:space="preserve"><value>Güncelleme Kontrol Et</value></data>
+  <data name="UpdateInstall" xml:space="preserve"><value>Şimdi Güncelle</value></data>
+  <data name="UpdateCurrentVersion" xml:space="preserve"><value>Yüklü sürüm: {0}</value></data>
+  <data name="UpdateStatusIdle" xml:space="preserve"><value>Güncelleme durumu bilinmiyor. Kontrol etmek için "Güncelleme Kontrol Et" düğmesine basın.</value></data>
+  <data name="UpdateChecking" xml:space="preserve"><value>Sunucu kontrol ediliyor…</value></data>
+  <data name="UpdateNoRelease" xml:space="preserve"><value>Sunucuda henüz yayımlanmış bir sürüm bulunmuyor.</value></data>
+  <data name="UpdateUpToDate" xml:space="preserve"><value>Uygulamanız güncel. (Sunucu sürümü: {0})</value></data>
+  <data name="UpdateAvailable" xml:space="preserve"><value>Yeni sürüm mevcut: {0} ({1}). "Şimdi Güncelle" ile yükleyebilirsiniz.</value></data>
+  <data name="UpdateReleaseNotes" xml:space="preserve"><value>Sürüm notları</value></data>
+  <data name="UpdateNoNotes" xml:space="preserve"><value>Bu sürüm için not girilmemiş.</value></data>
+  <data name="UpdateConfirm" xml:space="preserve"><value>Sürüm {0} indirilecek ve kurulacak. Uygulama yeniden başlatılacak. Devam edilsin mi?</value></data>
+  <data name="UpdateDownloading" xml:space="preserve"><value>Güncelleme indiriliyor…</value></data>
+  <data name="UpdateApplying" xml:space="preserve"><value>Güncelleme uygulanıyor, uygulama yeniden başlatılıyor…</value></data>
+  <data name="UpdateCancelled" xml:space="preserve"><value>İşlem iptal edildi.</value></data>
+  <data name="UpdateNetworkError" xml:space="preserve"><value>Sunucuya bağlanılamadı: {0}</value></data>
+  <data name="UpdateParseError" xml:space="preserve"><value>Sunucu yanıtı okunamadı.</value></data>
+  <data name="UpdateIOError" xml:space="preserve"><value>Dosya işlemi başarısız: {0}</value></data>
+  <data name="UpdateBadge" xml:space="preserve"><value>↑ v{0} mevcut</value></data>
+  <data name="DashboardTitle" xml:space="preserve"><value>Genel Bakış</value></data>
+  <data name="DashboardDescription" xml:space="preserve"><value>Bugün, bu ay ve ofis bazında SMS istatistikleri</value></data>
+  <data name="DashboardKpiTotalSms" xml:space="preserve"><value>Toplam SMS</value></data>
+  <data name="DashboardKpiMonthSms" xml:space="preserve"><value>Son 30 Gün SMS</value></data>
+  <data name="DashboardKpiOffices" xml:space="preserve"><value>Aktif ofis</value></data>
+  <data name="DashboardKpiCustomers" xml:space="preserve"><value>Toplam müşteri</value></data>
+  <data name="DashboardChartTitle" xml:space="preserve"><value>Son 30 Gün — Günlük SMS</value></data>
+  <data name="DashboardTopOffices" xml:space="preserve"><value>En Çok SMS Gönderen Ofisler</value></data>
+  <data name="DashboardRefresh" xml:space="preserve"><value>Yenile</value></data>
+  <data name="DashboardLoading" xml:space="preserve"><value>İstatistikler yükleniyor…</value></data>
+  <data name="DashboardNoData" xml:space="preserve"><value>İstatistik göstermek için veritabanına bağlanın.</value></data>
+  <data name="DashboardNoSms" xml:space="preserve"><value>Son 30 günde gönderim kaydı bulunamadı.</value></data>
+  <data name="DashboardStatus" xml:space="preserve"><value>Son güncelleme: {0}</value></data>
+  <data name="DashboardColOffice" xml:space="preserve"><value>Ofis</value></data>
+  <data name="DatabaseDebtors" xml:space="preserve"><value>Borçlu</value></data>
+</root>

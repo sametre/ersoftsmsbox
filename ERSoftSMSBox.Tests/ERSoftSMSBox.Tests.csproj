@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <DevExpressAssemblyPath Condition="'$(DevExpressAssemblyPath)' == ''">$(ProgramW6432)\DevExpress 25.1\Components\Bin\NetCore</DevExpressAssemblyPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="180.154.0" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <ProjectReference Include="..\ERSoftSMSBox.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.XtraBars.v25.1;DevExpress.XtraEditors.v25.1;DevExpress.XtraGrid.v25.1;DevExpress.Utils.v25.1;DevExpress.Data.v25.1;DevExpress.Drawing.v25.1">
+      <HintPath>$(DevExpressAssemblyPath)\%(Identity).dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

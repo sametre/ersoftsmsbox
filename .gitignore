@@ -24,6 +24,10 @@ appsettings.Local.json
 Thumbs.db
 desktop.ini
 
+# Publish output folders
+publish/
+C:\ERSoftSMSBox/
+
 # NuGet
 *.nupkg
 packages/

@@ -38,6 +38,17 @@ jobs:
           Set-Content $file $content -Encoding UTF8
           echo "AppVersion güncellendi: $ver"
 
+      - name: AppKey build zamanı inject et
+        shell: pwsh
+        env:
+          APP_KEY: ${{ secrets.APP_KEY }}
+        run: |
+          $file = "AppVersion.cs"
+          $content = Get-Content $file -Raw
+          $content = $content -replace 'BUILD_TIME_APP_KEY', $env:APP_KEY
+          Set-Content $file $content -Encoding UTF8
+          echo "AppKey inject edildi"
+
       - name: Derleme (publish_output)
         shell: pwsh
         run: |

@@ -16,6 +16,7 @@ public sealed class UpdateService : IDisposable
     {
         this.baseUrl = baseUrl.TrimEnd('/');
         http = new HttpClient { Timeout = TimeSpan.FromSeconds(30) };
+        http.DefaultRequestHeaders.Add("X-App-Key", AppVersion.AppKey);
     }
 
     public async Task<VersionInfo?> CheckForUpdateAsync(CancellationToken cancellation)

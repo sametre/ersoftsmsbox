@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Kodu al
@@ -28,7 +28,17 @@ jobs:
           echo "VERSION=$ver" >> $env:GITHUB_OUTPUT
           echo "Sürüm: $ver"
 
-      - name: Derleme
+      - name: AppVersion.cs güncelle
+        shell: pwsh
+        run: |
+          $ver = "${{ steps.version.outputs.VERSION }}"
+          $file = "AppVersion.cs"
+          $content = Get-Content $file -Raw
+          $content = $content -replace 'Current\s*=\s*"[^"]+"', "Current = `"$ver`""
+          Set-Content $file $content -Encoding UTF8
+          echo "AppVersion güncellendi: $ver"
+
+      - name: Derleme (publish_output)
         shell: pwsh
         run: |
           dotnet publish ERSoftSMSBox.csproj `
@@ -38,12 +48,35 @@ jobs:
             -o publish_output `
             --nologo
 
-      - name: ZIP oluştur
+      - name: Setup EXE oluştur (Inno Setup)
+        shell: pwsh
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            Write-Warning "Inno Setup bulunamadı, setup.exe atlanıyor"
+          } else {
+            # setup.iss içindeki version ve publish dir güncelle
+            $ver = "${{ steps.version.outputs.VERSION }}"
+            $iss = Get-Content setup.iss -Raw
+            $iss = $iss -replace '#define AppVersion ".*?"', "#define AppVersion `"$ver`""
+            Set-Content setup.iss $iss -Encoding UTF8
+            New-Item -ItemType Directory -Force -Path installer_output | Out-Null
+            & $iscc setup.iss
+            if ($LASTEXITCODE -eq 0) {
+              $f = Get-ChildItem installer_output\*.exe | Select-Object -First 1
+              echo "Setup EXE: $($f.Name) ($([math]::Round($f.Length/1MB,1)) MB)"
+              Rename-Item $f.FullName "ERSoftSMSBox-Setup-v$ver.exe"
+            } else {
+              Write-Error "Inno Setup derleme hatası"
+            }
+          }
+
+      - name: ZIP oluştur (güncelleme paketi)
         shell: pwsh
         run: |
           Compress-Archive -Path "publish_output\*" -DestinationPath "ERSoftSMSBox.zip" -CompressionLevel Optimal
           $mb = [math]::Round((Get-Item ERSoftSMSBox.zip).Length / 1MB, 1)
-          echo "Paket boyutu: $mb MB"
+          echo "ZIP boyutu: $mb MB"
 
       - name: GitHub Release oluştur
         uses: softprops/action-gh-release@v2
@@ -53,8 +86,16 @@ jobs:
           body: |
             ## ERSoftSMSBox ${{ github.ref_name }}
 
-            Otomatik oluşturulmuş sürüm.
-          files: ERSoftSMSBox.zip
+            ### Kurulum
+            - **ERSoftSMSBox-Setup-v*.exe** → Yeni kurulum için setup dosyası
+            - **ERSoftSMSBox.zip** → Otomatik güncelleme paketi (uygulama içinden kullanılır)
+
+            ### Gereksinimler
+            - .NET 8 Desktop Runtime (x64)
+            - Windows 10/11 x64
+          files: |
+            installer_output/ERSoftSMSBox-Setup-v${{ steps.version.outputs.VERSION }}.exe
+            ERSoftSMSBox.zip
           draft: false
           prerelease: false
 
@@ -66,23 +107,26 @@ jobs:
           VERSION: ${{ steps.version.outputs.VERSION }}
         run: |
           $serverUrl = if ($env:SERVER_URL) { $env:SERVER_URL } else { "http://temasre.shop" }
-          $filePath = "ERSoftSMSBox.zip"
-          $fileName = "ERSoftSMSBox.zip"
-          $fileBytes = [System.IO.File]::ReadAllBytes($filePath)
-          $boundary = [System.Guid]::NewGuid().ToString()
-          $encoding = [System.Text.Encoding]::UTF8
+          $ver    = $env:VERSION
+          $tag    = "${{ github.ref_name }}"
+          $notes  = "GitHub Actions ile otomatik derlendi. Tag: $tag"
 
-          $body = [System.IO.MemoryStream]::new()
+          $filePath  = "ERSoftSMSBox.zip"
+          $fileBytes = [System.IO.File]::ReadAllBytes($filePath)
+          $boundary  = [System.Guid]::NewGuid().ToString()
+          $encoding  = [System.Text.Encoding]::UTF8
+
+          $body   = [System.IO.MemoryStream]::new()
           $writer = [System.IO.StreamWriter]::new($body, $encoding)
 
           $writer.Write("--$boundary`r`n")
           $writer.Write("Content-Disposition: form-data; name=`"version`"`r`n`r`n")
-          $writer.Write("$($env:VERSION)`r`n")
+          $writer.Write("$ver`r`n")
           $writer.Write("--$boundary`r`n")
           $writer.Write("Content-Disposition: form-data; name=`"notes`"`r`n`r`n")
-          $writer.Write("GitHub Actions tarafindan otomatik yuklendi. Tag: ${{ github.ref_name }}`r`n")
+          $writer.Write("$notes`r`n")
           $writer.Write("--$boundary`r`n")
-          $writer.Write("Content-Disposition: form-data; name=`"package`"; filename=`"$fileName`"`r`n")
+          $writer.Write("Content-Disposition: form-data; name=`"package`"; filename=`"ERSoftSMSBox.zip`"`r`n")
           $writer.Write("Content-Type: application/zip`r`n`r`n")
           $writer.Flush()
           $body.Write($fileBytes, 0, $fileBytes.Length)
@@ -91,7 +135,7 @@ jobs:
           $bodyBytes = $body.ToArray()
           $body.Dispose()
 
-          $response = Invoke-RestMethod `
+          $resp = Invoke-RestMethod `
             -Uri "$serverUrl/upload" `
             -Method Post `
             -Body $bodyBytes `
@@ -99,5 +143,11 @@ jobs:
             -Headers @{ "X-Upload-Key" = $env:UPLOAD_SECRET } `
             -TimeoutSec 120
 
-          echo "Sunucu yaniti: $($response | ConvertTo-Json)"
-          echo "Surüm $($env:VERSION) basariyla yuklendi."
+          Write-Host "✓ Sürüm $ver sunucuya yüklendi ($([math]::Round($resp.size/1MB,1)) MB)"
+
+      - name: Temizlik
+        if: always()
+        shell: pwsh
+        run: |
+          Remove-Item publish_output -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item installer_output -Recurse -Force -ErrorAction SilentlyContinue

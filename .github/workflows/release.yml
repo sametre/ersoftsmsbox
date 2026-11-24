@@ -107,43 +107,23 @@ jobs:
           VERSION: ${{ steps.version.outputs.VERSION }}
         run: |
           $serverUrl = if ($env:SERVER_URL) { $env:SERVER_URL } else { "http://temasre.shop" }
-          $ver    = $env:VERSION
-          $tag    = "${{ github.ref_name }}"
-          $notes  = "GitHub Actions ile otomatik derlendi. Tag: $tag"
+          $ver  = $env:VERSION
+          $tag  = "${{ github.ref_name }}"
+          $notes = "GitHub Actions ile otomatik derlendi. Tag: $tag"
 
-          $filePath  = "ERSoftSMSBox.zip"
-          $fileBytes = [System.IO.File]::ReadAllBytes($filePath)
-          $boundary  = [System.Guid]::NewGuid().ToString()
-          $encoding  = [System.Text.Encoding]::UTF8
+          # curl.exe kullan - multipart için en güvenilir yöntem
+          $result = curl.exe -s -X POST "$serverUrl/upload" `
+            -H "X-Upload-Key: $($env:UPLOAD_SECRET)" `
+            -F "version=$ver" `
+            -F "notes=$notes" `
+            -F "package=@ERSoftSMSBox.zip;type=application/zip"
 
-          $body   = [System.IO.MemoryStream]::new()
-          $writer = [System.IO.StreamWriter]::new($body, $encoding)
-
-          $writer.Write("--$boundary`r`n")
-          $writer.Write("Content-Disposition: form-data; name=`"version`"`r`n`r`n")
-          $writer.Write("$ver`r`n")
-          $writer.Write("--$boundary`r`n")
-          $writer.Write("Content-Disposition: form-data; name=`"notes`"`r`n`r`n")
-          $writer.Write("$notes`r`n")
-          $writer.Write("--$boundary`r`n")
-          $writer.Write("Content-Disposition: form-data; name=`"package`"; filename=`"ERSoftSMSBox.zip`"`r`n")
-          $writer.Write("Content-Type: application/zip`r`n`r`n")
-          $writer.Flush()
-          $body.Write($fileBytes, 0, $fileBytes.Length)
-          $writer.Write("`r`n--$boundary--`r`n")
-          $writer.Flush()
-          $bodyBytes = $body.ToArray()
-          $body.Dispose()
-
-          $resp = Invoke-RestMethod `
-            -Uri "$serverUrl/upload" `
-            -Method Post `
-            -Body $bodyBytes `
-            -ContentType "multipart/form-data; boundary=$boundary" `
-            -Headers @{ "X-Upload-Key" = $env:UPLOAD_SECRET } `
-            -TimeoutSec 120
-
-          Write-Host "✓ Sürüm $ver sunucuya yüklendi ($([math]::Round($resp.size/1MB,1)) MB)"
+          $json = $result | ConvertFrom-Json
+          if ($json.ok) {
+            Write-Host "✓ Sürüm $($json.version) sunucuya yüklendi ($([math]::Round($json.size/1MB,1)) MB)"
+          } else {
+            Write-Error "Yükleme başarısız: $result"
+          }
 
       - name: Temizlik
         if: always()

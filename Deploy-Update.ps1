@@ -14,7 +14,7 @@
 param(
     [string]$Version = "",
     [string]$Notes = "",
-    [string]$ServerUrl = "http://ec2-51-21-196-155.eu-north-1.compute.amazonaws.com:8080",
+    [string]$ServerUrl = "http://temasre.shop",
     [string]$UploadSecret = $env:ERSOFT_UPLOAD_SECRET
 )
 

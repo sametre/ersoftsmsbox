@@ -65,7 +65,7 @@ jobs:
           SERVER_URL: ${{ vars.UPDATE_SERVER_URL }}
           VERSION: ${{ steps.version.outputs.VERSION }}
         run: |
-          $serverUrl = if ($env:SERVER_URL) { $env:SERVER_URL } else { "http://ec2-51-21-196-155.eu-north-1.compute.amazonaws.com:8080" }
+          $serverUrl = if ($env:SERVER_URL) { $env:SERVER_URL } else { "http://temasre.shop" }
           $filePath = "ERSoftSMSBox.zip"
           $fileName = "ERSoftSMSBox.zip"
           $fileBytes = [System.IO.File]::ReadAllBytes($filePath)
